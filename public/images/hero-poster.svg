@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" role="img" aria-label="Tyre retreading production line">
+<defs>
+<linearGradient id="bg-hero" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#1a1a20"/>
+<stop offset="55%" stop-color="#0a0a0c"/>
+<stop offset="100%" stop-color="#141419"/>
+</linearGradient>
+<radialGradient id="glow-hero" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#f47920" stop-opacity="0.55"/>
+<stop offset="60%" stop-color="#f47920" stop-opacity="0.12"/>
+<stop offset="100%" stop-color="#f47920" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="acc-hero" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#f79340"/>
+<stop offset="100%" stop-color="#f47920"/>
+</linearGradient>
+<pattern id="grid-hero" width="48" height="48" patternUnits="userSpaceOnUse">
+<path d="M48 0H0V48" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+</pattern>
+</defs>
+<rect width="1920" height="1080" fill="url(#bg-hero)"/>
+<g transform="skewX(-12)"><rect x="0" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.055"/><rect x="74" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.053"/><rect x="148" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.085"/><rect x="222" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.060"/><rect x="295" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.063"/><rect x="369" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.088"/><rect x="443" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.031"/><rect x="517" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.061"/><rect x="591" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.108"/><rect x="665" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.054"/><rect x="738" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.094"/><rect x="812" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.078"/><rect x="886" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.059"/><rect x="960" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.040"/><rect x="1034" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.085"/><rect x="1108" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.089"/><rect x="1182" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.108"/><rect x="1255" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.103"/><rect x="1329" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.115"/><rect x="1403" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.069"/><rect x="1477" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.115"/><rect x="1551" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.054"/><rect x="1625" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.098"/><rect x="1698" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.061"/><rect x="1772" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.087"/><rect x="1846" y="0" width="52" height="1080" fill="url(#acc-hero)" opacity="0.030"/></g>
+<rect width="1920" height="1080" fill="url(#grid-hero)"/>
+<ellipse cx="1190.4" cy="453.59999999999997" rx="720" ry="520" fill="url(#glow-hero)"/>
+<circle cx="1420.8" cy="561.6" r="330" fill="none" stroke="#ffffff" stroke-opacity="0.07" stroke-width="46"/>
+<circle cx="1420.8" cy="561.6" r="252" fill="none" stroke="#f47920" stroke-opacity="0.22" stroke-width="3"/>
+<circle cx="1420.8" cy="561.6" r="150" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="60"/>
+<rect y="1072" width="1920" height="8" fill="url(#acc-hero)"/>
+</svg>

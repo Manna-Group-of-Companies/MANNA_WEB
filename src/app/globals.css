@@ -1,0 +1,463 @@
+@import "tailwindcss";
+
+/* Class-based dark mode, toggled on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /*
+   * ── Breakpoints ──────────────────────────────────────────
+   * `xs` separates the 320–399px phones (the tightest layout we
+   * support) from the roomier 400px+ ones. The rest are Tailwind's
+   * defaults — `2xl` (96rem) is where the page widens.
+   */
+  --breakpoint-xs: 25rem;
+
+  /*
+   * ── Brand ────────────────────────────────────────────────
+   * Sampled from the MANNA Group logo: orange wordmark + graphite
+   * ellipse/"NN". If you have exact brand-guide values, change
+   * --color-brand-500 and --color-ink-700 here — everything else
+   * derives from them.
+   */
+  --color-brand-50: #fef5ed;
+  --color-brand-100: #fde7d2;
+  --color-brand-200: #fbcda3;
+  --color-brand-300: #f9ac6c;
+  --color-brand-400: #f79340;
+  --color-brand-500: #f47920; /* logo orange */
+  --color-brand-600: #dd6414;
+  --color-brand-700: #b64e13;
+  --color-brand-800: #8f3d17;
+  --color-brand-900: #743316;
+  --color-brand-950: #3f1808;
+
+  /* Neutral ink ramp — ink-700 is the logo graphite */
+  --color-ink-50: #f7f7f7;
+  --color-ink-100: #efefef;
+  --color-ink-200: #dddddd;
+  --color-ink-300: #bdbdbe;
+  --color-ink-400: #949496;
+  --color-ink-500: #6f6f72;
+  --color-ink-600: #58585b;
+  --color-ink-700: #4a4a4c; /* logo graphite */
+  --color-ink-800: #2e2e30;
+  --color-ink-900: #1c1c1e;
+  --color-ink-950: #0d0d0e;
+
+  /* Reusable brand glow shadows so the orange lives in one place */
+  --shadow-brand-sm: 0 10px 30px -10px rgb(244 121 32 / 0.6);
+  --shadow-brand-md: 0 16px 44px -12px rgb(244 121 32 / 0.78);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-sora), var(--font-inter), ui-sans-serif, system-ui,
+    sans-serif;
+
+  /* Fluid display type — mobile-first, scales with viewport */
+  --text-fluid-sm: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
+  --text-fluid-base: clamp(1rem, 0.95rem + 0.35vw, 1.15rem);
+  --text-fluid-lg: clamp(1.15rem, 1rem + 0.7vw, 1.4rem);
+  --text-fluid-xl: clamp(1.5rem, 1.2rem + 1.4vw, 2.1rem);
+  --text-fluid-2xl: clamp(1.9rem, 1.4rem + 2.4vw, 3rem);
+  --text-fluid-3xl: clamp(2.3rem, 1.5rem + 3.6vw, 4rem);
+  --text-fluid-4xl: clamp(2.8rem, 1.5rem + 5.6vw, 5.75rem);
+
+  --radius-card: 1.25rem;
+  --radius-xl2: 1.75rem;
+  /* Top corners of the mobile bottom-sheet dialogs */
+  --radius-sheet: 1.5rem;
+
+  --shadow-soft: 0 1px 2px rgb(18 18 19 / 0.04), 0 8px 24px -8px rgb(18 18 19 / 0.10);
+  --shadow-lift: 0 2px 4px rgb(18 18 19 / 0.05), 0 24px 48px -16px rgb(18 18 19 / 0.18);
+  --shadow-glow: 0 12px 40px -12px rgb(244 121 32 / 0.55);
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-marquee: marquee 42s linear infinite;
+  --animate-marquee-slow: marquee 70s linear infinite;
+  --animate-float-slow: floaty 9s ease-in-out infinite;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-spin-slow: spin 26s linear infinite;
+  --animate-pulse-ring: pulse-ring 2.8s ease-out infinite;
+}
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes floaty {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(0, -18px, 0) rotate(4deg); }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  70% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* ── Semantic surface tokens ───────────────────────────────── */
+@layer base {
+  :root {
+    /* Notch / home-indicator insets, resolved once so every component can
+       reach them without repeating the env() fallback dance. */
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-r: env(safe-area-inset-right, 0px);
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --safe-l: env(safe-area-inset-left, 0px);
+
+    /* Header height and gutter — single source of truth for the sticky
+       toolbar offsets, anchor scroll padding and hero top padding. */
+    --header-h: 5rem;
+    --pad-x: clamp(1.15rem, 0.5rem + 2.6vw, 2.5rem);
+
+    --bg: #ffffff;
+    --bg-subtle: #fbfaf9;
+    --surface: #ffffff;
+    --surface-2: #f6f5f4;
+    --fg: #131315;
+    --fg-muted: #65656a;
+    --border: rgb(18 18 19 / 0.10);
+    --border-strong: rgb(18 18 19 / 0.18);
+    --glass: rgb(255 255 255 / 0.74);
+    --glass-border: rgb(255 255 255 / 0.6);
+    --grid-line: rgb(18 18 19 / 0.045);
+    /* graphite half of the logo lockup */
+    --logo-graphite: #4a4a4c;
+    color-scheme: light;
+  }
+
+  .dark {
+    --bg: #0b0b0c;
+    --bg-subtle: #0f0f10;
+    --surface: #161618;
+    --surface-2: #202022;
+    --fg: #f4f4f4;
+    --fg-muted: #a1a1a5;
+    --border: rgb(255 255 255 / 0.10);
+    --border-strong: rgb(255 255 255 / 0.20);
+    --glass: rgb(22 22 24 / 0.68);
+    --glass-border: rgb(255 255 255 / 0.10);
+    --grid-line: rgb(255 255 255 / 0.05);
+    /* graphite would vanish on near-black — lift it to near-white */
+    --logo-graphite: #f0f0f0;
+    color-scheme: dark;
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-h: 6rem;
+    }
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* clears the sticky header on #anchor jumps, at whatever height it
+       currently is — no magic number to keep in sync */
+    scroll-padding-top: calc(var(--header-h) + 1.25rem);
+    -webkit-text-size-adjust: 100%;
+    /* `clip` (not `hidden`) contains decorative overflow without creating a
+       scroll container — position: sticky keeps working. */
+    overflow-x: clip;
+  }
+
+  /* Nothing may push the page sideways on small screens */
+  img,
+  svg,
+  video,
+  canvas,
+  iframe {
+    max-width: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible, on-brand focus ring everywhere (WCAG 2.4.7) */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-brand-500);
+    color: #fff;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 11px; height: 11px; }
+  ::-webkit-scrollbar-track { background: var(--bg-subtle); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 99px;
+    border: 3px solid var(--bg-subtle);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-brand-500); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ── Mobile style layer ──────────────────────────────────────
+     Phones get their own visual language rather than a shrunken
+     desktop one: flatter surfaces, hairline separation instead of
+     floating shadows, tighter radii, and a denser grid. Everything
+     here is scoped to < 768px, so the desktop design is untouched.  */
+  @media (max-width: 47.9375rem) {
+    :root {
+      --bg-subtle: #f7f6f4;
+      --surface-2: #f2f1ef;
+      /* Hairlines carry the separation that shadows carry on desktop,
+         so they need to be a shade more present. */
+      --border: rgb(18 18 19 / 0.14);
+      --border-strong: rgb(18 18 19 / 0.22);
+      --grid-line: rgb(18 18 19 / 0.035);
+      --radius-card: 1rem;
+      --radius-xl2: 1.25rem;
+    }
+
+    .dark {
+      --bg-subtle: #0e0e10;
+      --surface: #151517;
+      --surface-2: #1e1e21;
+      --border: rgb(255 255 255 / 0.13);
+      --border-strong: rgb(255 255 255 / 0.24);
+      --grid-line: rgb(255 255 255 / 0.04);
+    }
+
+    /* Chunkier thumbs are pointless on a touch device */
+    ::-webkit-scrollbar { width: 0; height: 0; }
+  }
+}
+
+@layer utilities {
+  .bg-page { background-color: var(--bg); }
+  .bg-subtle { background-color: var(--bg-subtle); }
+  .bg-surface { background-color: var(--surface); }
+  .bg-surface-2 { background-color: var(--surface-2); }
+  .text-fg { color: var(--fg); }
+  .text-muted { color: var(--fg-muted); }
+  .border-hair { border-color: var(--border); }
+  .border-strong { border-color: var(--border-strong); }
+
+  /* Glassmorphism */
+  .glass {
+    background: var(--glass);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+  }
+  .glass-strong {
+    background: color-mix(in oklab, var(--surface) 88%, transparent);
+    backdrop-filter: blur(28px) saturate(200%);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    border: 1px solid var(--glass-border);
+  }
+
+  /* Gradient text highlight */
+  .text-gradient-brand {
+    background-image: linear-gradient(
+      100deg,
+      var(--color-brand-400) 0%,
+      var(--color-brand-500) 38%,
+      var(--color-brand-600) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Ambient gradient glow blob */
+  .glow-blob {
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgb(244 121 32 / 0.55) 0%,
+      rgb(247 147 64 / 0.28) 35%,
+      transparent 70%
+    );
+    filter: blur(64px);
+    pointer-events: none;
+  }
+
+  /* Engineering grid backdrop */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .mask-fade-y {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  /* 1px gradient border via double background */
+  .ring-gradient {
+    background-image:
+      linear-gradient(var(--surface), var(--surface)),
+      linear-gradient(135deg, rgb(244 121 32 / 0.65), rgb(244 121 32 / 0) 55%);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    border: 1px solid transparent;
+  }
+
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-lift { box-shadow: var(--shadow-lift); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--surface-2) 25%,
+      color-mix(in oklab, var(--surface-2) 60%, var(--color-brand-100)) 50%,
+      var(--surface-2) 75%
+    );
+    background-size: 200% 100%;
+    animation: var(--animate-shimmer);
+  }
+
+  .pause-on-hover:hover { animation-play-state: paused; }
+
+  /* Hide scrollbar but keep scrolling (filter rails) */
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+
+  .preserve-3d { transform-style: preserve-3d; }
+  .backface-hidden { backface-visibility: hidden; }
+
+  /* Section rhythm */
+  .section-y { padding-block: clamp(3.75rem, 2.5rem + 7vw, 9rem); }
+  .container-page {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 84rem;
+    /* Landscape notches eat into the gutter — add the inset on top of it */
+    padding-inline:
+      calc(var(--pad-x) + var(--safe-l))
+      calc(var(--pad-x) + var(--safe-r));
+  }
+  @media (min-width: 96rem) {
+    .container-page { max-width: 90rem; }
+  }
+
+  /* ── Mobile layout primitives ─────────────────────────────────
+     The building blocks behind the phone-specific layouts: rails
+     that replace grids, full-bleed media, and safe-area padding. */
+
+  /* Horizontal scroll-snap rail, at every width */
+  .snap-rail {
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: var(--pad-x);
+    -webkit-overflow-scrolling: touch;
+  }
+  .snap-rail > * { scroll-snap-align: start; }
+
+  /*
+   * Turns a grid into a swipeable rail on phones only. Deliberately
+   * self-contained rather than something `sm:grid` has to override —
+   * at 640px and up this class does nothing at all, so the responsive
+   * grid utilities are the only thing in play. Always pair it with
+   * `sm:` variants that restore the desktop display mode.
+   */
+  @media (max-width: 39.9375rem) {
+    .rail-mobile {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      scroll-padding-inline: var(--pad-x);
+      -webkit-overflow-scrolling: touch;
+    }
+    .rail-mobile > * {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+    }
+  }
+
+  /*
+   * Cancels the container gutter so a rail or image runs corner to
+   * corner, then puts the gutter back as padding so the first and
+   * last items still line up with the text above them.
+   *
+   * Stops at `sm`, matching {@link .rail-mobile} — the two are always
+   * used together, so pair them with `sm:` utilities.
+   */
+  @media (max-width: 39.9375rem) {
+    .bleed-mobile {
+      margin-inline: calc(-1 * (var(--pad-x) + var(--safe-l)))
+        calc(-1 * (var(--pad-x) + var(--safe-r)));
+      padding-inline: calc(var(--pad-x) + var(--safe-l))
+        calc(var(--pad-x) + var(--safe-r));
+    }
+  }
+
+  /* WCAG 2.5.5 — nothing tappable smaller than 44px on touch */
+  .tap { min-height: 2.75rem; min-width: 2.75rem; }
+
+  /* Safe-area aware spacing for anything pinned to a screen edge */
+  .pb-safe { padding-bottom: max(1rem, var(--safe-b)); }
+  .pt-safe { padding-top: max(1rem, var(--safe-t)); }
+  .bottom-safe { bottom: max(1.25rem, var(--safe-b)); }
+
+  /* Full viewport height that survives the mobile URL bar collapsing */
+  .min-h-screen-safe {
+    min-height: 100svh;
+    min-height: 100dvh;
+  }
+
+  /* ── Mobile restyling of the shared primitives ────────────────
+     Same class names, different physics: on a phone the design
+     leans on hairlines and tighter blur instead of the deep,
+     expensive shadows and heavy glass used on desktop. */
+  @media (max-width: 47.9375rem) {
+    .shadow-soft { box-shadow: 0 1px 2px rgb(18 18 19 / 0.05); }
+    .shadow-lift { box-shadow: 0 12px 30px -18px rgb(18 18 19 / 0.45); }
+    .shadow-glow { box-shadow: 0 8px 22px -12px rgb(244 121 32 / 0.5); }
+
+    /* Large blurred layers are the main scroll-jank source on phones */
+    .glass,
+    .glass-strong {
+      backdrop-filter: blur(14px) saturate(160%);
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
+    }
+    .glow-blob { filter: blur(44px); }
+    .bg-grid { background-size: 38px 38px; }
+  }
+}

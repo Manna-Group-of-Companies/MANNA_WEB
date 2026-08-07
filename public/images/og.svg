@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+<defs>
+<linearGradient id="bg-og" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#1a1a20"/>
+<stop offset="55%" stop-color="#0a0a0c"/>
+<stop offset="100%" stop-color="#141419"/>
+</linearGradient>
+<radialGradient id="glow-og" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#f47920" stop-opacity="0.55"/>
+<stop offset="60%" stop-color="#f47920" stop-opacity="0.12"/>
+<stop offset="100%" stop-color="#f47920" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="acc-og" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#f79340"/>
+<stop offset="100%" stop-color="#f47920"/>
+</linearGradient>
+<pattern id="grid-og" width="48" height="48" patternUnits="userSpaceOnUse">
+<path d="M48 0H0V48" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+</pattern>
+</defs>
+<rect width="1200" height="630" fill="url(#bg-og)"/>
+<rect width="1200" height="630" fill="url(#grid-og)"/>
+<ellipse cx="983.9999999999999" cy="315" rx="420" ry="360" fill="url(#glow-og)"/>
+<circle cx="996" cy="315" r="196" fill="none" stroke="#ffffff" stroke-opacity="0.09" stroke-width="40"/>
+<circle cx="996" cy="315" r="140" fill="none" stroke="#f47920" stroke-opacity="0.35" stroke-width="3"/>
+<text x="78" y="250" font-family="ui-sans-serif,system-ui,sans-serif" font-size="30" font-weight="600" fill="#f47920" letter-spacing="5">MANNA RUBBER PRODUCTS</text>
+<text x="78" y="345" font-family="ui-sans-serif,system-ui,sans-serif" font-size="76" font-weight="800" fill="#ffffff" letter-spacing="-3">Premium Tyre</text>
+<text x="78" y="432" font-family="ui-sans-serif,system-ui,sans-serif" font-size="76" font-weight="800" fill="#ffffff" letter-spacing="-3">Retreading Solutions</text>
+<text x="78" y="505" font-family="ui-sans-serif,system-ui,sans-serif" font-size="27" font-weight="500" fill="#ffffff" fill-opacity="0.62">30+ years · Rubber Park, Kerala · Exporting to Africa &amp; the Middle East</text>
+<rect y="621" width="1200" height="9" fill="url(#acc-og)"/>
+</svg>

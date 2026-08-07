@@ -1,0 +1,38 @@
+{
+  "name": "manna-rubber-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Manna Rubber Products Pvt. Ltd. — Tyre Retreading",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "assets": "node scripts/generate-assets.mjs",
+    "clean": "node -e \"const{rmSync}=require('fs');['.next','.next-dev'].forEach(d=>rmSync(d,{recursive:true,force:true}));console.log('cleaned build output')\""
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^13.0.0",
+    "gsap": "^3.15.0",
+    "lucide-react": "^1.29.0",
+    "next": "^15.5.23",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwind-merge": "^3.6.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.6",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^26.1.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.0",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3"
+  }
+}
