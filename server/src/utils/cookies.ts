@@ -27,8 +27,9 @@ export function readSessionCookie(req: Request): string | null {
 export function setSessionCookie(res: Response, token: string, expiresAt: Date): void {
   res.cookie(env.sessionCookieName, token, {
     httpOnly: true,
-    // Lax still arrives on the top-level navigation back from Google.
-    sameSite: 'lax',
+    // Lax is enough while the client shares an origin with the API; a client
+    // on another site needs None or the browser never sends this back.
+    sameSite: env.cookieSameSite,
     secure: env.cookieSecure,
     path: '/',
     expires: expiresAt,
@@ -38,7 +39,8 @@ export function setSessionCookie(res: Response, token: string, expiresAt: Date):
 export function clearSessionCookie(res: Response): void {
   res.clearCookie(env.sessionCookieName, {
     httpOnly: true,
-    sameSite: 'lax',
+    // Must match setSessionCookie exactly, or the browser keeps the old cookie.
+    sameSite: env.cookieSameSite,
     secure: env.cookieSecure,
     path: '/',
   });
