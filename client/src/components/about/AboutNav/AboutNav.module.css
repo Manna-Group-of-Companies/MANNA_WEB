@@ -1,0 +1,125 @@
+.nav {
+  position: sticky;
+  top: calc(var(--header-h) + var(--sp-5));
+}
+
+.title {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+}
+
+.list {
+  display: grid;
+  gap: 0.15rem;
+  margin-top: var(--sp-4);
+  border-left: 1px solid var(--c-line);
+}
+
+.link {
+  position: relative;
+  display: block;
+  padding: 0.6rem 0 0.6rem var(--sp-4);
+  margin-left: -1px;
+  border-left: 1px solid transparent;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  color: var(--c-ink-muted);
+  transition:
+    color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+/* The orange marker grows out of the rail rather than switching on. */
+.link::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--c-brand);
+  transform: scaleY(0);
+  transition: transform var(--dur) var(--ease);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--c-ink);
+  border-left-color: var(--c-line-strong);
+  transform: translateX(3px);
+}
+
+.active,
+.active:hover {
+  color: var(--c-brand);
+  transform: none;
+}
+
+.active::before {
+  transform: scaleY(1);
+}
+
+/* Below the two-column breakpoint the rail runs across the top instead. */
+@media (max-width: 900px) {
+  .nav {
+    position: static;
+  }
+
+  .list {
+    display: flex;
+    gap: 0;
+    margin-top: var(--sp-3);
+    padding-bottom: var(--sp-2);
+    border-left: 0;
+    border-bottom: 1px solid var(--c-line);
+    overflow-x: auto;
+    scrollbar-width: thin;
+    /* Momentum scrolling, and each item settles under the finger. */
+    scroll-snap-type: x proximity;
+  }
+
+  .link {
+    padding: 0.55rem 0.9rem;
+    margin-left: 0;
+    border-left: 0;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    scroll-snap-align: start;
+  }
+
+  .link:first-child {
+    padding-left: 0;
+  }
+
+  .link:hover,
+  .link:focus-visible {
+    border-bottom-color: var(--c-line-strong);
+    transform: none;
+  }
+
+  /* The marker turns through ninety degrees with the rail. */
+  .link::before {
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: -1px;
+    width: auto;
+    height: 2px;
+    transform: scaleX(0);
+  }
+
+  .active::before {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .active::before {
+    transform: none;
+  }
+}

@@ -1,0 +1,98 @@
+/* Every variant hovers to Manna orange; only the resting state differs. */
+.button {
+  --btn-bg: var(--c-inverse);
+  --btn-fg: var(--c-on-ink);
+  --btn-border: transparent;
+  --btn-bg-hover: var(--c-brand);
+  --btn-fg-hover: var(--c-brand-on);
+  --btn-border-hover: var(--c-brand);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  border: 1px solid var(--btn-border);
+  border-radius: var(--r-btn);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+.button:hover:not(:disabled),
+.button:focus-visible:not(:disabled) {
+  background: var(--btn-bg-hover);
+  color: var(--btn-fg-hover);
+  border-color: var(--btn-border-hover);
+}
+
+.button:active:not(:disabled) {
+  background: var(--c-brand-strong);
+  border-color: var(--c-brand-strong);
+  color: var(--c-brand-on);
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Sizes ─────────────────────────────────────────────────────── */
+.md {
+  padding: 1rem 1.6rem;
+}
+
+.lg {
+  padding: 1.35rem 2.6rem;
+  font-size: 0.875rem;
+}
+
+/* ── Variants ──────────────────────────────────────────────────── */
+
+/* Primary: white block on the black page. */
+.dark {
+  --btn-bg: var(--c-inverse);
+  --btn-fg: var(--c-on-ink);
+}
+
+/* Inverted: black block for use on a light band. */
+.light {
+  --btn-bg: var(--c-paper);
+  --btn-fg: var(--c-ink);
+}
+
+.outline {
+  --btn-bg: transparent;
+  --btn-fg: var(--c-ink);
+  --btn-border: var(--c-line-strong);
+}
+
+.outlineLight {
+  --btn-bg: transparent;
+  --btn-fg: var(--c-on-ink);
+  --btn-border: rgba(11, 11, 12, 0.28);
+}
+
+/* ── Arrow ─────────────────────────────────────────────────────── */
+.arrow {
+  display: inline-block;
+  font-size: 1.15em;
+  transition: transform var(--dur) var(--ease);
+}
+
+.button:hover .arrow {
+  transform: translateX(4px);
+}
+
+.label {
+  display: inline-block;
+}

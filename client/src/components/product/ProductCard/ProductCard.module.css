@@ -1,0 +1,246 @@
+/**
+ * Catalogue card, sharing the capability card's shape: a dark washed panel
+ * with copy at the top, artwork cropped off the bottom edge, chips floating
+ * over it and an arrow in the corner.
+ *
+ * The tones below are the same four washes as `Capabilities.module.css`. They
+ * are duplicated rather than imported because CSS Modules have no mixins and
+ * the two components are otherwise independent — if a fifth tone is added,
+ * add it in both places.
+ */
+
+.card {
+  --card-pad: clamp(1.125rem, 1.6vw, 1.5rem);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 292 / 410;
+  padding: var(--card-pad);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--c-line);
+  background: var(--card-wash);
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--c-line-strong);
+  box-shadow: var(--shadow-md);
+}
+
+/* The stretched link takes the focus ring, so the card shows it too. */
+.card:focus-within {
+  border-color: var(--c-line-strong);
+}
+
+/* Sinks the foot of the artwork so the arrow always has ground to sit on. */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0) 34%
+  );
+}
+
+/* Tones — the wash reads as a lit surface, brightest at the top corner. */
+.card[data-tone='ink'] {
+  --card-wash: linear-gradient(168deg, #171b25 0%, #0b0d13 48%, #05060a 100%);
+}
+
+.card[data-tone='teal'] {
+  --card-wash: linear-gradient(168deg, #12433c 0%, #0a221f 50%, #050e0d 100%);
+}
+
+.card[data-tone='clay'] {
+  --card-wash: linear-gradient(168deg, #4b3421 0%, #2a1c11 50%, #120c07 100%);
+}
+
+.card[data-tone='slate'] {
+  --card-wash: linear-gradient(168deg, #262a31 0%, #14161a 50%, #08090b 100%);
+}
+
+/* ── Copy ──────────────────────────────────────────────────────── */
+.head {
+  position: relative;
+  z-index: 2;
+  /* Keeps the heading clear of the wishlist control in the corner. */
+  padding-right: 2.25rem;
+}
+
+.category {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+}
+
+.title {
+  margin-top: 0.35rem;
+  font-size: clamp(1.125rem, 1.4vw, 1.3125rem);
+  color: var(--c-ink);
+}
+
+/* Stretched: the anchor covers the card without wrapping its content. */
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.card:hover .link {
+  color: var(--c-brand);
+}
+
+/* Type matches the capability card's body exactly — 15px, #d8d8db, 12px above,
+   1.45 leading — so the two card families read as one system.
+
+   The block is also held to a fixed three lines whichever way the text falls:
+   clamped so a long summary cannot push the artwork down, and floored at the
+   same height so a one-line summary cannot pull it up. Without the floor the
+   art panel started at a different point on every card and a grid row came out
+   ragged. `em` rather than px, so the reservation tracks the font size. */
+.summary {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+  color: var(--c-ink-soft);
+  min-height: calc(3 * 1.45em);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+/* ── Artwork ───────────────────────────────────────────────────── */
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  /* Bleeds past the card padding: the panel is cropped by the card's own
+     bottom edge, the way a device mock is in the reference. */
+  margin: var(--sp-5) calc(var(--card-pad) * -1) calc(var(--card-pad) * -1);
+}
+
+.frame {
+  position: absolute;
+  inset: 0 18% -14%;
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.09),
+    var(--shadow-lg);
+  transition: transform var(--dur) var(--ease);
+}
+
+.card:hover .frame {
+  transform: translateY(-4px);
+}
+
+.art,
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Spec chips ────────────────────────────────────────────────── */
+.chip {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  max-width: 82%;
+  padding: 0.4rem 0.6rem;
+  border-radius: 7px;
+  background: var(--c-inverse);
+  color: var(--c-on-ink);
+  font-size: var(--fs-xs);
+  line-height: 1.25;
+  white-space: nowrap;
+  box-shadow: 0 12px 26px -14px rgba(0, 0, 0, 0.9);
+}
+
+.chipLabel {
+  font-weight: var(--fw-medium);
+}
+
+.chipValue {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--c-on-ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chips straddle the artwork's edge rather than sitting inside it — the
+   overhang is what makes the panel read as a thing being measured. */
+.chip[data-at='top-left'] {
+  top: 8%;
+  left: 4%;
+}
+
+.chip[data-at='top-right'] {
+  top: 6%;
+  right: 4%;
+}
+
+.chip[data-at='mid-left'] {
+  top: 46%;
+  left: 4%;
+}
+
+.chip[data-at='mid-right'] {
+  top: 44%;
+  right: 4%;
+}
+
+.chip[data-at='bottom-left'] {
+  bottom: 26%;
+  left: 4%;
+}
+
+.chip[data-at='bottom-right'] {
+  bottom: 24%;
+  right: 4%;
+}
+
+/* ── Wishlist ──────────────────────────────────────────────────── */
+/* Lifted above the stretched link so the heart stays its own target. */
+.action {
+  position: absolute;
+  z-index: 3;
+  top: calc(var(--card-pad) - 0.4rem);
+  right: calc(var(--card-pad) - 0.4rem);
+  color: var(--c-ink);
+}
+
+/* ── Arrow ─────────────────────────────────────────────────────── */
+.arrow {
+  position: absolute;
+  z-index: 2;
+  right: var(--card-pad);
+  bottom: calc(var(--card-pad) - 0.25rem);
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--c-ink);
+  transition: transform var(--dur) var(--ease);
+}
+
+.card:hover .arrow {
+  transform: translateX(4px);
+}

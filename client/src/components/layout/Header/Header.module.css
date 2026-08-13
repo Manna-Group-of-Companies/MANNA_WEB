@@ -1,0 +1,663 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--c-paper);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur) var(--ease);
+}
+
+.isScrolled {
+  border-bottom-color: var(--c-line);
+  background: rgba(0, 0, 0, 0.86);
+  backdrop-filter: saturate(150%) blur(14px);
+}
+
+/* A translucent bar over an opaque panel reads as two surfaces; go solid
+   for as long as a menu is down. */
+.header[data-nav-open='true'] {
+  background: var(--c-paper);
+  border-bottom-color: transparent;
+  backdrop-filter: none;
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--sp-5);
+  max-width: 1480px;
+  min-height: var(--header-h);
+  margin-inline: auto;
+  padding-inline: var(--wrap-pad);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(1rem, 2.4vw, 2.25rem);
+}
+
+/* ── Centre nav ────────────────────────────────────────────────── */
+/* Stretched to the full height of the bar: an open item is drawn as a box
+   running from the top of the header to its bottom edge, where the panel
+   picks it up. The gap between items is small because the padding on each
+   link is what separates them now. */
+.nav {
+  display: flex;
+  align-self: stretch;
+  align-items: stretch;
+  gap: clamp(0.15rem, 0.6vw, 0.6rem);
+}
+
+/* Deliberately not positioned — the panel below resolves against the header
+   so it can span the full bar. */
+.navItem {
+  display: inline-flex;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding-inline: clamp(0.7rem, 1.4vw, 1.15rem);
+  /* Transparent to start with, so opening an item colours a box that is
+     already there rather than adding one and shunting the bar sideways.
+     Closed on all four sides: the sheet below floats clear of the bar, so
+     an open bottom edge would hang over nothing. */
+  border: 1px solid transparent;
+  background: transparent;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  color: var(--c-ink);
+  opacity: 0.82;
+  transition:
+    color var(--dur) var(--ease),
+    opacity var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.navLink:hover,
+.navLink:focus-visible,
+.navOpen {
+  color: var(--c-brand);
+  opacity: 1;
+}
+
+/* The open item, boxed and joined to the panel below: three sides ruled,
+   the fourth left open onto the menu it belongs to. */
+.navOpen {
+  border-color: var(--c-line-strong);
+  background: var(--c-paper);
+}
+
+/* The page you are on. Full opacity and an underline rather than the brand
+   colour, which is what hover means here. Drawn on the label so it tracks
+   the text rather than the full-height box. */
+.navCurrent {
+  opacity: 1;
+}
+
+.navCurrent .navLabel {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+}
+
+/* No border or background reset here: the button takes both from .navLink,
+   which is what draws the open item's box. */
+.navTrigger {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.chevron {
+  width: 9px;
+  height: 6px;
+  transition: transform var(--dur) var(--ease);
+}
+
+.navOpen .chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Mega-menu panel ───────────────────────────────────────────── */
+/* The panel itself is only a positioning layer spanning the bar; the card
+   inside it is what you see — a contained sheet centred under the nav,
+   floating clear of the header rather than bleeding to the edges.
+   Transparent, so it cannot cover the page either side of the card. */
+.panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: var(--z-dropdown);
+  padding: 10px var(--wrap-pad) 0;
+  pointer-events: none;
+}
+
+/* Bridges the gap between the bar and the sheet. Without it the pointer
+   crosses dead space on the way down, leaves the header, and the menu shuts
+   under the hand reaching for it. It lives here rather than on the sheet
+   because the sheet scrolls, and `overflow` clips anything outside it. */
+.panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  pointer-events: auto;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+/* Settles rather than snaps: a long ease-out, scaled and lifted from the top
+   edge so the sheet reads as dropping out of the bar it belongs to. */
+@keyframes panel-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.panelInner {
+  position: relative;
+  display: grid;
+  /* Links take the room they need; the rail holds a fixed reading width. */
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
+  gap: clamp(1.5rem, 3vw, 2.75rem);
+  /* The reference sheet is a shade under 1000px wide with 40px of padding. */
+  max-width: 1040px;
+  margin-inline: auto;
+  padding: 40px;
+  border: 1px solid var(--c-line);
+  border-radius: 12px;
+  /* The same black as the bar and the page, so the sheet reads as the header
+     extending rather than as a panel laid over it. The rule and the shadow
+     are what separate it from the page behind. */
+  background: var(--c-paper);
+  box-shadow: var(--shadow-lg);
+  max-height: calc(100dvh - var(--header-h) - 2rem);
+  overflow-y: auto;
+  pointer-events: auto;
+  transform-origin: top center;
+  animation: panel-drop 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* The columns and the rail arrive just behind the sheet, so the menu opens
+   as one movement instead of appearing complete. */
+.panelMain,
+.rail {
+  animation: panel-content 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.panelMain {
+  animation-delay: 60ms;
+}
+
+.rail {
+  animation-delay: 120ms;
+}
+
+@keyframes panel-content {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.panelMain {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3.5rem);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 3rem);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 3vw, 2.75rem);
+}
+
+.groupTitle {
+  margin-bottom: 1.4rem;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+}
+
+.groupList {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.panelLink {
+  display: block;
+  padding-block: 0.42rem;
+  font-size: var(--fs-sm);
+  color: var(--c-ink);
+  transition:
+    color var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+
+.panelLink:hover,
+.panelLink:focus-visible {
+  color: var(--c-brand);
+  opacity: 1;
+}
+
+/* Catch-all link, parked under the first column. */
+.panelCta {
+  margin-top: auto;
+  font-size: var(--fs-sm);
+  color: var(--c-ink);
+  transition:
+    color var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+
+.panelCta:hover,
+.panelCta:focus-visible {
+  color: var(--c-brand);
+  opacity: 1;
+}
+
+/* ── Featured rail ─────────────────────────────────────────────── */
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 2.4vw, 2.25rem);
+  padding-left: clamp(1.5rem, 3vw, 3rem);
+  border-left: 1px solid var(--c-line);
+}
+
+.railGroup {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.card {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.95rem 1.1rem;
+  background: var(--c-surface-2);
+  border-radius: var(--r-md);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.card:hover {
+  background: var(--c-surface-3);
+}
+
+.cardTitle {
+  font-size: var(--fs-sm);
+  color: var(--c-ink);
+  transition: color var(--dur) var(--ease);
+}
+
+.card:hover .cardTitle,
+.card:focus-visible .cardTitle {
+  color: var(--c-brand);
+}
+
+.cardBody {
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+  color: var(--c-ink-muted);
+}
+
+/* Below the rail's breakpoint the panel would crush; drop it under the
+   links instead. */
+@media (max-width: 1240px) {
+  .panelInner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rail {
+    padding-left: 0;
+    padding-top: clamp(1.5rem, 3vw, 2.25rem);
+    border-left: 0;
+    border-top: 1px solid var(--c-line);
+  }
+}
+
+/* ── Right-hand actions ────────────────────────────────────────── */
+.quiet {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  color: var(--c-ink);
+  opacity: 0.82;
+  transition:
+    color var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+
+.quiet:hover,
+.quiet:focus-visible {
+  color: var(--c-brand);
+  opacity: 1;
+}
+
+/* ── Wishlist ──────────────────────────────────────────────────── */
+.wishlist {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: var(--c-ink);
+  opacity: 0.82;
+  transition:
+    color var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+
+.wishlist:hover,
+.wishlist:focus-visible {
+  color: var(--c-brand);
+  opacity: 1;
+}
+
+.heart {
+  width: 21px;
+  height: 21px;
+}
+
+/* Rides the top-right of the heart rather than sitting beside it, so the
+   bar's spacing does not shift as the count changes. */
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  min-width: 17px;
+  height: 17px;
+  padding-inline: 4px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-pill);
+  background: var(--c-brand);
+  color: var(--c-brand-on);
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Signed-in chip ────────────────────────────────────────────── */
+.account {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 12rem;
+  transition: color var(--dur) var(--ease);
+}
+
+.account:hover,
+.account:focus-visible {
+  color: var(--c-brand);
+}
+
+.avatar,
+.avatarFallback {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--c-line-strong);
+}
+
+.avatar {
+  object-fit: cover;
+}
+
+.avatarFallback {
+  display: grid;
+  place-items: center;
+  border-color: transparent;
+  background: var(--c-brand);
+  color: var(--c-brand-on);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+}
+
+.accountName {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Account menu ──────────────────────────────────────────────────
+   Signing out used to live only in the mobile burger, which left desktop
+   with no way out of a session at all. The panel anchors to the avatar
+   rather than the header, so it does not span the bar the way a mega
+   menu does.
+------------------------------------------------------------------- */
+.accountWrap {
+  position: relative;
+}
+
+.caret {
+  flex: none;
+  opacity: 0.7;
+  transition: transform var(--dur) var(--ease);
+}
+
+.account[aria-expanded='true'] .caret {
+  transform: rotate(180deg);
+}
+
+.accountMenu {
+  position: absolute;
+  z-index: var(--z-dropdown);
+  top: calc(100% + 0.75rem);
+  right: 0;
+  min-width: 15rem;
+  padding: 0.4rem;
+  border: 1px solid var(--c-line-strong);
+  border-radius: var(--r-md);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.accountMenu[hidden] {
+  display: none;
+}
+
+.accountIdentity {
+  padding: 0.6rem 0.7rem 0.7rem;
+  border-bottom: 1px solid var(--c-line);
+  margin-bottom: 0.4rem;
+}
+
+.accountFullName {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--c-ink);
+}
+
+.accountEmail {
+  margin-top: 0.15rem;
+  font-size: var(--fs-xs);
+  color: var(--c-ink-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accountItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  font-size: var(--fs-sm);
+  text-align: left;
+  color: var(--c-ink-soft);
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.accountItem:hover,
+.accountItem:focus-visible {
+  background: var(--c-surface-2);
+  color: var(--c-ink);
+}
+
+.accountCount {
+  min-width: 1.25rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: var(--r-pill);
+  background: var(--c-brand);
+  color: var(--c-brand-on);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.accountSignOut:hover,
+.accountSignOut:focus-visible {
+  color: var(--c-danger);
+}
+
+/* ── Burger ────────────────────────────────────────────────────── */
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  padding: 0 8px;
+}
+
+.burger span {
+  display: block;
+  height: 1.5px;
+  width: 100%;
+  background: var(--c-ink);
+  transition:
+    background-color var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.burger:hover span,
+.burger:focus-visible span {
+  background: var(--c-brand);
+}
+
+.header[data-open='true'] .burger span:first-child {
+  transform: translateY(3.25px) rotate(45deg);
+}
+
+.header[data-open='true'] .burger span:last-child {
+  transform: translateY(-3.25px) rotate(-45deg);
+}
+
+/* ── Mobile menu ───────────────────────────────────────────────── */
+.mobileMenu {
+  display: none;
+  border-top: 1px solid var(--c-line);
+  background: var(--c-paper);
+  padding: var(--sp-5) var(--wrap-pad) var(--sp-7);
+}
+
+.mobileList {
+  display: grid;
+  margin-bottom: var(--sp-5);
+}
+
+.mobileLink {
+  display: block;
+  padding: 0.95rem 0;
+  font-size: 1.35rem;
+  font-weight: var(--fw-heading);
+  letter-spacing: var(--tr-heading);
+  border-bottom: 1px solid var(--c-line);
+  transition: color var(--dur) var(--ease);
+}
+
+.mobileLink:hover,
+.mobileLink:focus-visible {
+  color: var(--c-brand);
+}
+
+.mobileActions {
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.mobileQuiet {
+  justify-self: center;
+  padding: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--c-ink-muted);
+  transition: color var(--dur) var(--ease);
+}
+
+.mobileQuiet:hover,
+.mobileQuiet:focus-visible {
+  color: var(--c-brand);
+}
+
+@media (max-width: 1080px) {
+  .inner {
+    grid-template-columns: 1fr auto;
+  }
+
+  .nav,
+  .right {
+    display: none;
+  }
+
+  .burger {
+    display: flex;
+  }
+
+  .mobileMenu {
+    display: block;
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+  }
+
+  .mobileMenu[hidden] {
+    display: none;
+  }
+}

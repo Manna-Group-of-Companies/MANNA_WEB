@@ -1,0 +1,303 @@
+/* Two panels: an editorial column that carries the brand, and the card that
+   does the work. Below 900px the column drops away and the card is the page. */
+
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--c-paper);
+}
+
+/* ── Brand column ──────────────────────────────────────────────── */
+.aside {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: var(--sp-8) clamp(2rem, 5vw, 5rem);
+  border-right: 1px solid var(--c-line);
+  background:
+    radial-gradient(
+      120% 90% at 8% 0%,
+      rgba(244, 121, 32, 0.16) 0%,
+      transparent 60%
+    ),
+    var(--c-surface);
+  overflow: hidden;
+}
+
+/* Faint rule grid — the same drafting-paper motif the site uses elsewhere. */
+.aside::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--c-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--c-line) 1px, transparent 1px);
+  background-size: 72px 72px;
+  opacity: 0.5;
+  mask-image: radial-gradient(90% 70% at 20% 30%, #000 0%, transparent 75%);
+  pointer-events: none;
+}
+
+.asideInner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-5);
+  max-width: 30rem;
+}
+
+.eyebrow {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase;
+  color: var(--c-brand);
+}
+
+.asideTitle {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-display);
+  letter-spacing: var(--tr-display);
+  line-height: var(--lh-snug);
+}
+
+.benefits {
+  color: var(--c-ink-soft);
+}
+
+.asideFoot {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-sm);
+  color: var(--c-ink-faint);
+}
+
+.asideFoot a {
+  color: var(--c-ink-muted);
+  border-bottom: 1px solid var(--c-line-strong);
+  transition: color var(--dur) var(--ease);
+}
+
+.asideFoot a:hover {
+  color: var(--c-brand);
+}
+
+/* ── Card column ───────────────────────────────────────────────── */
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-5);
+  padding: var(--sp-8) var(--wrap-pad);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+  max-width: 26rem;
+  padding: clamp(1.75rem, 3.5vw, 2.75rem);
+  border: 1px solid var(--c-line);
+  background: var(--c-surface);
+  text-align: center;
+}
+
+/* The lockup only belongs on the card when the brand column is gone. */
+.cardLogo {
+  display: none;
+  margin-bottom: var(--sp-2);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.title {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-heading);
+}
+
+.lede {
+  font-size: var(--fs-sm);
+  color: var(--c-ink-muted);
+}
+
+.loading {
+  padding-block: var(--sp-5);
+  font-size: var(--fs-sm);
+  color: var(--c-ink-faint);
+}
+
+.micro {
+  font-size: var(--fs-xs);
+  color: var(--c-ink-faint);
+  max-width: 30ch;
+}
+
+.setup {
+  padding: var(--sp-4);
+  border: 1px solid var(--c-line-strong);
+  background: var(--c-surface-2);
+  font-size: var(--fs-xs);
+  line-height: 1.7;
+  color: var(--c-ink-muted);
+  text-align: left;
+}
+
+.setup code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.95em;
+  color: var(--c-ink);
+}
+
+/* ── Signed-in state ───────────────────────────────────────────── */
+.signedIn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: var(--sp-3);
+  border: 1px solid var(--c-line);
+  background: var(--c-surface-2);
+  text-align: left;
+}
+
+.avatar,
+.avatarFallback {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: var(--r-pill);
+}
+
+.avatar {
+  object-fit: cover;
+}
+
+.avatarFallback {
+  display: grid;
+  place-items: center;
+  background: var(--c-brand);
+  color: var(--c-brand-on);
+  font-weight: var(--fw-bold);
+}
+
+.identityText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.identityText strong {
+  font-weight: var(--fw-medium);
+}
+
+.identityEmail {
+  font-size: var(--fs-xs);
+  color: var(--c-ink-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quiet {
+  font-size: var(--fs-sm);
+  color: var(--c-ink-muted);
+  transition: color var(--dur) var(--ease);
+}
+
+.quiet:hover {
+  color: var(--c-brand);
+}
+
+/* ── Status, switch, legal ─────────────────────────────────────── */
+.status {
+  min-height: 1.25rem;
+  font-size: var(--fs-sm);
+  color: var(--c-ink-muted);
+}
+
+.statusError {
+  color: var(--c-danger);
+}
+
+.statusSuccess {
+  color: var(--c-accent);
+}
+
+.switch {
+  font-size: var(--fs-sm);
+  color: var(--c-ink-muted);
+}
+
+.switch a {
+  color: var(--c-ink);
+  border-bottom: 1px solid var(--c-line-strong);
+  transition: color var(--dur) var(--ease);
+}
+
+.switch a:hover {
+  color: var(--c-brand);
+}
+
+.legal {
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--c-line);
+  width: 100%;
+  font-size: var(--fs-xs);
+  line-height: 1.65;
+  color: var(--c-ink-faint);
+}
+
+.legal a {
+  color: var(--c-ink-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.back {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+  transition: color var(--dur) var(--ease);
+}
+
+.back:hover {
+  color: var(--c-ink);
+}
+
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aside {
+    display: none;
+  }
+
+  .cardLogo {
+    display: inline-flex;
+  }
+
+  .panel {
+    padding-block: var(--sp-7);
+  }
+}

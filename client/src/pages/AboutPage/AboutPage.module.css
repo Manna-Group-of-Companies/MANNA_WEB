@@ -1,0 +1,114 @@
+.body {
+  padding-block: clamp(3rem, 6vw, 5rem);
+  background: var(--c-paper);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border: 1px solid var(--c-line);
+  background: var(--c-surface);
+  overflow: hidden;
+  transition:
+    transform var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    background var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.card:hover,
+.card:focus-within {
+  transform: translateY(-4px);
+  border-color: var(--c-line-strong);
+  background: var(--c-surface-2);
+  box-shadow: var(--shadow-md);
+}
+
+/* A brand rule wipes across the head of the card on hover. */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: var(--c-brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur) var(--ease);
+}
+
+.card:hover::before,
+.card:focus-within::before {
+  transform: scaleX(1);
+}
+
+.index {
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tr-caps);
+  color: var(--c-brand);
+  transition: transform var(--dur) var(--ease);
+}
+
+.card:hover .index {
+  transform: translateX(3px);
+}
+
+.cardTitle {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-heading);
+  letter-spacing: var(--tr-heading);
+  transition: color var(--dur) var(--ease);
+}
+
+.card:hover .cardTitle {
+  color: var(--c-brand);
+}
+
+/* Stretched over the whole card, so the tile is one target. */
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.cardBody {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  color: var(--c-ink-muted);
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: var(--sp-3);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+  transition: color var(--dur) var(--ease);
+}
+
+.card:hover .more,
+.card:focus-within .more {
+  color: var(--c-brand);
+}
+
+.arrow {
+  transition: transform var(--dur) var(--ease);
+}
+
+.card:hover .arrow,
+.card:focus-within .arrow {
+  transform: translateX(4px);
+}

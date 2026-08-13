@@ -1,0 +1,34 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  transition: opacity var(--dur) var(--ease);
+}
+
+/* The exchange is in flight — keep the button visible but inert. */
+.wrap[data-busy='true'] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.host {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+}
+
+.loading,
+.fallback {
+  font-size: var(--fs-sm);
+  color: var(--c-ink-muted);
+  text-align: center;
+}
+
+.fallback {
+  padding: var(--sp-4);
+  border: 1px solid var(--c-line);
+  color: var(--c-danger);
+}

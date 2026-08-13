@@ -1,0 +1,151 @@
+.savedLink {
+  font-size: var(--fs-sm);
+  color: var(--c-brand);
+  transition: opacity var(--dur) var(--ease);
+}
+
+.savedLink:hover,
+.savedLink:focus-visible {
+  opacity: 0.75;
+}
+
+.body {
+  padding-block: clamp(2rem, 4vw, 3.5rem) var(--section-y);
+  background: var(--c-paper);
+}
+
+/* ── Toolbar ───────────────────────────────────────────────────── */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-pill);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.02em;
+  color: var(--c-ink-muted);
+  white-space: nowrap;
+  transition:
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.chip:hover,
+.chip:focus-visible {
+  border-color: var(--c-line-strong);
+  color: var(--c-ink);
+}
+
+.chipActive {
+  background: var(--c-inverse);
+  border-color: var(--c-inverse);
+  color: var(--c-on-ink);
+}
+
+.chipActive:hover,
+.chipActive:focus-visible {
+  color: var(--c-on-ink);
+}
+
+/* ── Search ────────────────────────────────────────────────────── */
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 260px;
+  max-width: 340px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.75rem;
+  width: 18px;
+  height: 18px;
+  color: var(--c-ink-faint);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 0.75rem 0 2.5rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-pill);
+  background: var(--c-surface);
+  font-size: var(--fs-sm);
+  transition: border-color var(--dur) var(--ease);
+}
+
+.searchInput::placeholder {
+  color: var(--c-ink-faint);
+}
+
+.searchInput:focus {
+  border-color: var(--c-line-strong);
+  outline: none;
+}
+
+.searchInput:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+/* ── Results ───────────────────────────────────────────────────── */
+.count {
+  margin-top: var(--sp-5);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--product-card-min), 1fr)
+  );
+  gap: clamp(1rem, 2vw, 1.75rem);
+  margin-top: var(--sp-5);
+}
+
+/* ── Empty state ───────────────────────────────────────────────── */
+.empty {
+  max-width: 52ch;
+  margin: clamp(3rem, 7vw, 5rem) auto;
+  text-align: center;
+}
+
+.emptyTitle {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-display);
+  letter-spacing: var(--tr-display);
+}
+
+.emptyBody {
+  margin-top: var(--sp-4);
+  color: var(--c-ink-muted);
+}
+
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-4);
+  margin-top: var(--sp-6);
+}

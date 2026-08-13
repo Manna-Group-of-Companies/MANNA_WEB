@@ -1,0 +1,100 @@
+.quiet {
+  font-size: var(--fs-sm);
+  color: var(--c-ink-muted);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color var(--dur) var(--ease);
+}
+
+.quiet:hover,
+.quiet:focus-visible {
+  color: var(--c-ink);
+}
+
+.confirm {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+  font-size: var(--fs-sm);
+}
+
+.confirmText {
+  color: var(--c-ink-muted);
+}
+
+.danger {
+  font-size: var(--fs-sm);
+  color: var(--c-danger);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.body {
+  padding-block: clamp(2.5rem, 5vw, 4rem) var(--section-y);
+  background: var(--c-paper);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--product-card-min), 1fr)
+  );
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+
+/* Sits where the wishlist heart normally does, so the card layout is unchanged. */
+.remove {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--c-line-strong);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  color: var(--c-ink);
+  transition:
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.remove svg {
+  width: 20px;
+  height: 20px;
+}
+
+.remove:hover,
+.remove:focus-visible {
+  border-color: var(--c-danger);
+  color: var(--c-danger);
+}
+
+.remove:active {
+  transform: scale(0.94);
+}
+
+/* ── Foot ──────────────────────────────────────────────────────── */
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding-top: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid var(--c-line);
+}
+
+.footText {
+  max-width: 46ch;
+  color: var(--c-ink-muted);
+}
+
+.footActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+}

@@ -1,0 +1,56 @@
+.head {
+  padding-block: clamp(2.5rem, 5vw, 4.5rem) clamp(2rem, 3.5vw, 3rem);
+  border-bottom: 1px solid var(--c-line);
+  background: var(--c-paper);
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--fs-xs);
+  color: var(--c-ink-faint);
+}
+
+.crumb {
+  transition: color var(--dur) var(--ease);
+}
+
+.crumb:hover,
+.crumb:focus-visible {
+  color: var(--c-brand);
+}
+
+.eyebrow {
+  margin-top: var(--sp-5);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase;
+  color: var(--c-brand);
+}
+
+.title {
+  max-width: 18ch;
+  margin-top: var(--sp-3);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-display);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tr-display);
+}
+
+.lede {
+  max-width: 62ch;
+  margin-top: var(--sp-5);
+  font-size: var(--fs-lede);
+  color: var(--c-ink-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-top: var(--sp-6);
+}

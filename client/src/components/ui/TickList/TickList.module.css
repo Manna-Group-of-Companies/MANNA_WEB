@@ -1,0 +1,29 @@
+.list {
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.7rem;
+  align-items: start;
+  color: var(--c-ink-soft);
+}
+
+.tick {
+  width: 1.15em;
+  height: 1.15em;
+  margin-top: 0.32em;
+  flex: none;
+  color: var(--c-accent);
+}
+
+.md {
+  font-size: var(--fs-sm);
+}
+
+.lg {
+  font-size: var(--fs-body);
+  gap: var(--sp-4);
+}

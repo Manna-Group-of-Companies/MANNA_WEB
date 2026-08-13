@@ -1,0 +1,319 @@
+.section {
+  padding-block: var(--section-y);
+  background: var(--c-paper);
+}
+
+/* ── Rail ──────────────────────────────────────────────────────── */
+.rail {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.track {
+  /* Portrait card from the reference: 292 × 410. */
+  --card-w: clamp(248px, 22vw, 292px);
+  --card-gap: clamp(0.875rem, 1.6vw, 1.25rem);
+  /* Room for the focus ring, taken back off the margin so the first card
+     still lines up with the heading above it. */
+  --rail-bleed: 4px;
+
+  display: flex;
+  gap: var(--card-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding: var(--rail-bleed);
+  margin: calc(var(--rail-bleed) * -1);
+  scroll-padding-inline: var(--rail-bleed);
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.item {
+  flex: none;
+  width: var(--card-w);
+  scroll-snap-align: start;
+}
+
+/* ── Card ──────────────────────────────────────────────────────── */
+.card {
+  --card-pad: clamp(1.125rem, 1.6vw, 1.5rem);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 292 / 410;
+  padding: var(--card-pad);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--c-line);
+  background: var(--card-wash);
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--c-line-strong);
+  box-shadow: var(--shadow-md);
+}
+
+/* Sinks the foot of the artwork so the arrow always has ground to sit on. */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0) 34%
+  );
+}
+
+/* Tones — the wash reads as a lit surface, brightest at the top corner. */
+.card[data-tone='ink'] {
+  --card-wash: linear-gradient(168deg, #171b25 0%, #0b0d13 48%, #05060a 100%);
+}
+
+.card[data-tone='teal'] {
+  --card-wash: linear-gradient(168deg, #12433c 0%, #0a221f 50%, #050e0d 100%);
+}
+
+.card[data-tone='clay'] {
+  --card-wash: linear-gradient(168deg, #4b3421 0%, #2a1c11 50%, #120c07 100%);
+}
+
+.card[data-tone='slate'] {
+  --card-wash: linear-gradient(168deg, #262a31 0%, #14161a 50%, #08090b 100%);
+}
+
+.title {
+  position: relative;
+  z-index: 2;
+  font-size: clamp(1.125rem, 1.4vw, 1.3125rem);
+  color: var(--c-ink);
+}
+
+.body {
+  position: relative;
+  z-index: 2;
+  margin-top: var(--sp-3);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+  color: var(--c-ink-soft);
+}
+
+/* ── Artwork ───────────────────────────────────────────────────── */
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  /* Bleeds past the card padding: the panel is cropped by the card's own
+     bottom edge, the way a device mock is in the reference. */
+  margin: var(--sp-5) calc(var(--card-pad) * -1) calc(var(--card-pad) * -1);
+}
+
+.frame {
+  position: absolute;
+  inset: 0 18% -14%;
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.09),
+    var(--shadow-lg);
+  transition: transform var(--dur) var(--ease);
+}
+
+.card:hover .frame {
+  transform: translateY(-4px);
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Spec chips ────────────────────────────────────────────────── */
+.chip {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  max-width: 82%;
+  padding: 0.4rem 0.6rem;
+  border-radius: 7px;
+  background: var(--c-inverse);
+  color: var(--c-on-ink);
+  font-size: var(--fs-xs);
+  line-height: 1.25;
+  white-space: nowrap;
+  box-shadow: 0 12px 26px -14px rgba(0, 0, 0, 0.9);
+}
+
+.chipLabel {
+  font-weight: var(--fw-medium);
+}
+
+.chipValue {
+  color: var(--c-on-ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chips straddle the artwork's edge rather than sitting inside it — the
+   overhang is what makes the panel read as a thing being measured. */
+.chip[data-at='top-left'] {
+  top: 8%;
+  left: 4%;
+}
+
+.chip[data-at='top-right'] {
+  top: 6%;
+  right: 4%;
+}
+
+.chip[data-at='mid-left'] {
+  top: 46%;
+  left: 4%;
+}
+
+.chip[data-at='mid-right'] {
+  top: 44%;
+  right: 4%;
+}
+
+.chip[data-at='bottom-left'] {
+  bottom: 26%;
+  left: 4%;
+}
+
+.chip[data-at='bottom-right'] {
+  bottom: 24%;
+  right: 4%;
+}
+
+/* ── Arrow ─────────────────────────────────────────────────────── */
+.arrow {
+  position: absolute;
+  z-index: 2;
+  right: var(--card-pad);
+  bottom: calc(var(--card-pad) - 0.25rem);
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--c-ink);
+  transition: transform var(--dur) var(--ease);
+}
+
+.card:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* ── Controls ──────────────────────────────────────────────────── */
+.controls {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin-top: clamp(1.5rem, 2.6vw, 2.25rem);
+}
+
+.dots {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* The button is a 24px-tall hit area; the pill inside is what you see. */
+.dot {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 24px;
+  transition: width var(--dur) var(--ease);
+}
+
+.dot[aria-current='true'] {
+  width: 42px;
+}
+
+.dotMark {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--c-line-strong);
+  transition:
+    width var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.dot:hover .dotMark,
+.dot:focus-visible .dotMark {
+  background: var(--c-brand);
+}
+
+.dot[aria-current='true'] .dotMark {
+  width: 32px;
+  background: var(--c-ink);
+}
+
+.arrows {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--c-line-strong);
+  color: var(--c-ink);
+  transition:
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+
+.nav:hover:not(:disabled),
+.nav:focus-visible:not(:disabled) {
+  background: var(--c-brand);
+  border-color: var(--c-brand);
+  color: var(--c-brand-on);
+}
+
+.nav:disabled {
+  opacity: 0.32;
+  cursor: default;
+}
+
+@media (max-width: 700px) {
+  .track {
+    --card-w: min(76vw, 292px);
+  }
+
+  .controls {
+    grid-template-columns: 1fr auto;
+  }
+
+  .dots {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .arrows {
+    grid-column: 2;
+  }
+}

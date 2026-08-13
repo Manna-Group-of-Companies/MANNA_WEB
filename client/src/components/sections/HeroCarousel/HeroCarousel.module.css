@@ -1,0 +1,92 @@
+/* Card geometry from the reference: 369 × 232 landscape.
+   The width shrinks on narrow viewports; the ratio never changes. */
+.carousel {
+  --card-w: clamp(228px, 24vw, 369px);
+  --card-ratio: 369 / 232;
+  /* One value drives both the gap between cards and the gap between rows,
+     so the grid stays square. ~40px at desktop, matching the reference. */
+  --card-gap: clamp(1.25rem, 3vw, 2.5rem);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-gap);
+}
+
+.row {
+  position: relative;
+  overflow: hidden;
+  /* Fade both ends into the page rather than cutting the cards off. */
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+}
+
+.track {
+  display: flex;
+  gap: var(--card-gap);
+  width: max-content;
+  animation: drift var(--carousel-duration, 72s) linear infinite;
+  /* No `will-change` here: the animation promotes the layer on its own, and
+     a permanent hint keeps the layer alive for the life of the page. */
+}
+
+/* The track holds two identical copies, so travelling exactly -50%
+   lands on a frame indistinguishable from the start. */
+@keyframes drift {
+  from {
+    transform: translate3d(var(--carousel-start-position, 0px), 0, 0);
+  }
+  to {
+    transform: translate3d(
+      calc(var(--carousel-start-position, 0px) - 50%),
+      0,
+      0
+    );
+  }
+}
+
+.row[data-direction='right'] .track {
+  animation-direction: reverse;
+}
+
+/* ── Card ──────────────────────────────────────────────────────── */
+.card {
+  flex: none;
+  width: var(--card-w);
+}
+
+/* No hover state: the cards are decoration and lead nowhere, so a lift
+   would advertise an interaction that does not exist. */
+.imageWrapper {
+  aspect-ratio: var(--card-ratio);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--c-surface-2);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+    transform: none;
+  }
+
+  .row {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .row::-webkit-scrollbar {
+    display: none;
+  }
+}

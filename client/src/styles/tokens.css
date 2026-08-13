@@ -1,0 +1,150 @@
+/* ------------------------------------------------------------------
+   Design tokens — the single source of truth for the visual language.
+
+   Dark editorial theme: black page, white ink, square-cornered buttons,
+   oversized light-weight display type. "Ink" is the foreground you write
+   with, "paper" is the surface you write on — so on this theme ink is
+   white and paper is black.
+------------------------------------------------------------------- */
+
+:root {
+  color-scheme: dark;
+
+  /* ── Surfaces ───────────────────────────────────────────────── */
+  --c-paper: #000000;
+  --c-surface: #0c0c0e;
+  --c-surface-2: #151517;
+  --c-surface-3: #1e1e21;
+  /* Light surface used for primary buttons and the inverted band. */
+  --c-inverse: #ffffff;
+
+  /* ── Foreground ─────────────────────────────────────────────── */
+  --c-ink: #ffffff;
+  --c-ink-soft: #d8d8db;
+  --c-ink-muted: #a2a2a7;
+  --c-ink-faint: #737378;
+  /* Text sitting on --c-inverse or on an ink-filled button. */
+  --c-on-ink: #0b0b0c;
+  --c-on-ink-muted: #5b5c60;
+
+  /* ── Lines ──────────────────────────────────────────────────── */
+  --c-line: rgba(255, 255, 255, 0.13);
+  --c-line-strong: rgba(255, 255, 255, 0.34);
+
+  /* ── Brand ──────────────────────────────────────────────────── */
+  /* Manna orange. Carries the logo mark and every hover state — nav links
+     and buttons alike. */
+  --c-brand: #f47920;
+  /* Text sitting on an orange fill. White on this orange only reaches ~2.9:1,
+     so filled orange takes a near-black label (~7:1) instead. */
+  --c-brand-on: #170f06;
+  /* Pressed / deepened orange, for a filled button that is already orange. */
+  --c-brand-strong: #d9640d;
+
+  /* ── Accent ─────────────────────────────────────────────────── */
+  --c-accent: #7fd8c9;
+  --c-accent-soft: rgba(127, 216, 201, 0.14);
+  --c-danger: #ff8b83;
+
+  --c-focus: #7fd8c9;
+
+  /* ── Typography ─────────────────────────────────────────────── */
+
+  /* Body: neutral grotesque. */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+
+  /* Display: headline face.
+     The reference page sets its headings in Squarespace Sans, a proprietary
+     brand typeface that cannot be redistributed. 'Inter Tight' is the closest
+     free equivalent — a tight-set grotesque drawn for display sizes. The
+     Helvetica entries let machines that already license those faces use them.
+     Drop a licensed Squarespace Sans / Söhne at the front of this stack and
+     every heading picks it up. */
+  --font-display: 'Inter Tight', 'Squarespace Sans', 'Helvetica Neue',
+    Helvetica, 'Inter', ui-sans-serif, system-ui, Arial, sans-serif;
+
+  /* Testimony: the reviews band is the one place the site speaks in
+     somebody else's voice, and the one place a serif appears. Newsreader
+     carries a real optical-size axis, so display and body sizes use the
+     cut drawn for them rather than one scaled up. */
+  --font-serif: 'Newsreader', ui-serif, Georgia, 'Times New Roman', serif;
+
+  --fs-display: clamp(2.375rem, 5.3vw, 4.75rem);
+  --fs-h1: clamp(2.25rem, 5.2vw, 4rem);
+  --fs-h2: clamp(1.875rem, 3.6vw, 3rem);
+  --fs-h3: clamp(1.25rem, 1.8vw, 1.5rem);
+  --fs-lede: clamp(1.0625rem, 1.4vw, 1.3125rem);
+  --fs-body: 1rem;
+  --fs-sm: 0.9375rem;
+  --fs-xs: 0.8125rem;
+
+  /* Display type is set light and tight, the way the reference sets it. */
+  --fw-display: 300;
+  --fw-heading: 400;
+  --fw-medium: 500;
+  --fw-bold: 600;
+
+  --lh-tight: 1.04;
+  --lh-snug: 1.16;
+  --lh-body: 1.62;
+
+  --tr-display: -0.025em;
+  --tr-heading: -0.02em;
+  --tr-eyebrow: 0.14em;
+  /* Uppercase micro-labels: nav items and button captions. */
+  --tr-caps: 0.09em;
+
+  /* ── Space ──────────────────────────────────────────────────── */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  --sp-9: 6rem;
+  --sp-10: 8rem;
+
+  --section-y: clamp(4.5rem, 9vw, 8.5rem);
+  --wrap-max: 1240px;
+  --wrap-pad: clamp(1.25rem, 4vw, 2.5rem);
+
+  /* ── Radius ─────────────────────────────────────────────────── */
+  /* Buttons and tabs are square on this theme. */
+  --r-btn: 0px;
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;
+  --r-pill: 999px;
+
+  /* ── Shadow & motion ────────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 18px 40px -18px rgba(0, 0, 0, 0.85);
+  --shadow-lg: 0 48px 90px -44px rgba(0, 0, 0, 0.95);
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 140ms;
+  --dur: 260ms;
+  --dur-slow: 620ms;
+
+  --header-h: 80px;
+  /* Announcement bar is not rendered; keep the token at 0 so --chrome-h
+     still measures the real stack above the hero. */
+  --announce-h: 0px;
+  /* Everything stacked above the hero. Used to work out where the fold
+     falls, so the hero can park the carousel across it. */
+  --chrome-h: calc(var(--header-h) + var(--announce-h));
+  --z-header: 100;
+  --z-announce: 90;
+  --z-dropdown: 110;
+  --z-overlay: 200;
+
+  /* Narrowest a catalogue card may be before the grid drops a column, which
+     is what actually sets how large the cards render: a smaller floor fits
+     more columns and makes every card smaller. Held here because the same
+     figure drives three separate grids — the catalogue, the wishlist and the
+     related rail on a product page — and they have to agree. */
+  --product-card-min: 230px;
+}

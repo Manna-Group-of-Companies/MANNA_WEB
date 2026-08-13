@@ -1,0 +1,82 @@
+.bar {
+  position: relative;
+  z-index: var(--z-announce);
+  background: var(--c-surface-2);
+  color: var(--c-ink);
+  border-bottom: 1px solid var(--c-line);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  max-width: var(--wrap-max);
+  margin-inline: auto;
+  padding: 0.6rem var(--wrap-pad);
+  font-size: var(--fs-xs);
+}
+
+.tag {
+  flex: none;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.14);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+}
+
+.text {
+  color: var(--c-ink-muted);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.link {
+  color: var(--c-ink);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.link:hover {
+  text-decoration-color: transparent;
+}
+
+.close {
+  position: absolute;
+  right: var(--wrap-pad);
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--r-pill);
+  color: var(--c-ink-muted);
+  transition:
+    color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.close svg {
+  width: 12px;
+  height: 12px;
+}
+
+.close:hover,
+.close:focus-visible {
+  color: var(--c-brand);
+  background: rgba(244, 121, 32, 0.14);
+}
+
+@media (max-width: 640px) {
+  .close {
+    display: none;
+  }
+
+  .inner {
+    font-size: 0.75rem;
+  }
+}

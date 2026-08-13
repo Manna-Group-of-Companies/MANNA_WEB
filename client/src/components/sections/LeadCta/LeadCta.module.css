@@ -1,0 +1,156 @@
+.section {
+  padding-block: var(--section-y);
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-line);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-4);
+}
+
+.title {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-display);
+  letter-spacing: var(--tr-display);
+  line-height: var(--lh-snug);
+}
+
+.lede {
+  font-size: var(--fs-lede);
+  color: var(--c-ink-muted);
+  max-width: 52ch;
+}
+
+.formWrap {
+  width: 100%;
+  max-width: 560px;
+  margin-top: var(--sp-3);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.row {
+  display: flex;
+  gap: var(--sp-2);
+  padding: 6px;
+  border-radius: var(--r-btn);
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-line-strong);
+  transition: border-color var(--dur) var(--ease);
+}
+
+.row:focus-within {
+  border-color: var(--c-ink);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 0 1rem;
+  border: 0;
+  background: transparent;
+  font-size: 1.0625rem;
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--c-ink-faint);
+}
+
+.input:disabled {
+  opacity: 0.6;
+}
+
+.micro {
+  font-size: var(--fs-xs);
+  color: var(--c-ink-faint);
+}
+
+.status {
+  min-height: 1.25rem;
+  font-size: var(--fs-sm);
+  color: var(--c-ink-muted);
+}
+
+.statusError {
+  color: var(--c-danger);
+}
+
+.statusSuccess {
+  color: var(--c-accent);
+}
+
+/* ── Contact details ─────────────────────────────────────────────
+   The works address, sat under the form so the page ends on somewhere
+   real rather than on an email box.
+------------------------------------------------------------------ */
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-4);
+  width: 100%;
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--c-line);
+  text-align: left;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.detailLabel {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+}
+
+.detailValue {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal, 1.55);
+  color: var(--c-ink-muted);
+  font-style: normal;
+}
+
+.detailLink {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--c-line-strong);
+  transition: border-color var(--dur) var(--ease);
+}
+
+.detailLink:hover {
+  border-color: var(--c-ink);
+}
+
+@media (max-width: 760px) {
+  .details {
+    grid-template-columns: 1fr;
+    gap: var(--sp-3);
+  }
+}
+
+@media (max-width: 560px) {
+  .row {
+    flex-direction: column;
+    padding: var(--sp-3);
+    gap: var(--sp-3);
+  }
+
+  .input {
+    padding: 0.6rem 0.4rem;
+    border-bottom: 1px solid var(--c-line);
+  }
+}

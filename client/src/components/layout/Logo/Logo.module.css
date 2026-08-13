@@ -1,0 +1,14 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+/* Height drives the lockup; width follows the 158:60 aspect so the art is
+   never stretched. The source art is only 60px tall, so this is the one
+   number to change if the lockup needs resizing again. */
+.mark {
+  height: 44px;
+  width: auto;
+  flex: none;
+}

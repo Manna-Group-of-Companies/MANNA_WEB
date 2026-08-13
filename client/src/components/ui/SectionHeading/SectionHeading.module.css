@@ -1,0 +1,46 @@
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  max-width: 44ch;
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.center {
+  max-width: 52ch;
+  margin-inline: auto;
+  text-align: center;
+  align-items: center;
+}
+
+.eyebrow {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+
+.title {
+  font-size: var(--fs-h2);
+  letter-spacing: var(--tr-heading);
+}
+
+.lede {
+  font-size: var(--fs-lede);
+  color: var(--c-ink-muted);
+  max-width: 52ch;
+}
+
+/* ── Light tone (dark backgrounds) ─────────────────────────────── */
+.light .eyebrow {
+  color: var(--c-on-ink-muted);
+}
+
+.light .title {
+  color: var(--c-on-ink);
+}
+
+.light .lede {
+  color: var(--c-on-ink-muted);
+}

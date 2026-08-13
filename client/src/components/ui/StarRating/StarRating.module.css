@@ -1,0 +1,115 @@
+/* ── Read-only row ─────────────────────────────────────────────── */
+.stars {
+  position: relative;
+  display: inline-block;
+  /* Must size to its own stars: the fill overlay is a percentage of this box,
+     so letting a flex or grid parent stretch it would fill every star. */
+  width: fit-content;
+  max-width: 100%;
+  line-height: 0;
+  white-space: nowrap;
+}
+
+.track,
+.fill {
+  display: inline-flex;
+  gap: 0.12em;
+}
+
+/* Clipped over the outlines to give fractional averages a partial star. */
+.fill {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.star {
+  width: 1em;
+  height: 1em;
+  flex: none;
+}
+
+.sm {
+  font-size: 13px;
+}
+
+.md {
+  font-size: 16px;
+}
+
+.lg {
+  font-size: 22px;
+}
+
+/* Colours come from tokens a section can override, because these stars are
+   drawn on the black page in some places and on a light band in others —
+   the page-level --c-line-strong is invisible on white. */
+.empty {
+  fill: none;
+  stroke: var(--star-empty, var(--c-line-strong));
+  stroke-width: 1.4;
+}
+
+.full {
+  fill: var(--star-fill, var(--c-brand));
+}
+
+/* ── Picker ────────────────────────────────────────────────────── */
+.picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+  font-size: 26px;
+}
+
+.pick {
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--star-empty, var(--c-line-strong));
+  transition:
+    color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.pick .star {
+  fill: currentColor;
+}
+
+.pick[data-on='true'] {
+  color: var(--star-fill, var(--c-brand));
+}
+
+/* Hovering a star lights it and everything before it, the way the filled
+   state reads — done in CSS so it needs no hover state in React. */
+.picker:hover .pick {
+  color: var(--star-fill, var(--c-brand));
+}
+
+.picker .pick:hover ~ .pick {
+  color: var(--star-empty, var(--c-line-strong));
+}
+
+.pick:hover {
+  transform: scale(1.08);
+}
+
+.pick:has(:focus-visible) {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 3px;
+  border-radius: var(--r-sm);
+}
+
+.pick:has(:disabled) {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.pickLabel {
+  margin-left: 0.35rem;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  color: var(--star-label, var(--c-ink-muted));
+}

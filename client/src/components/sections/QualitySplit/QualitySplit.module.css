@@ -1,0 +1,100 @@
+.section {
+  padding-block: var(--section-y);
+  background: var(--c-paper);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(2.5rem, 6vw, 5.5rem);
+}
+
+/* ── Media side ────────────────────────────────────────────────── */
+.media {
+  position: relative;
+}
+
+.art {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.badge {
+  position: absolute;
+  right: clamp(-0.5rem, -1vw, -1.5rem);
+  bottom: clamp(1.5rem, 4vw, 2.75rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 1rem 1.35rem;
+  border-radius: var(--r-btn);
+  background: var(--c-surface-2);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--c-line-strong);
+}
+
+.badgeValue {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: var(--fw-heading);
+  letter-spacing: var(--tr-display);
+  line-height: 1;
+}
+
+.badgeUnit {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--c-ink-faint);
+  margin-left: 0.15rem;
+}
+
+.badgeCaption {
+  font-size: var(--fs-xs);
+  color: var(--c-ink-muted);
+}
+
+/* ── Copy side ─────────────────────────────────────────────────── */
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-4);
+}
+
+.eyebrow {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+
+.title {
+  font-size: var(--fs-h2);
+}
+
+.lede {
+  font-size: var(--fs-lede);
+  color: var(--c-ink-muted);
+}
+
+.list {
+  margin-block: var(--sp-2);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .art {
+    aspect-ratio: 4 / 3;
+  }
+
+  .badge {
+    right: 1rem;
+  }
+}

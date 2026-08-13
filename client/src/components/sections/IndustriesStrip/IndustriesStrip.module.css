@@ -1,0 +1,35 @@
+.strip {
+  padding-block: clamp(3rem, 5vw, 4.5rem);
+  background: var(--c-paper);
+  border-bottom: 1px solid var(--c-line);
+}
+
+.label {
+  text-align: center;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+  margin-bottom: var(--sp-5);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(1.25rem, 3.5vw, 3rem);
+}
+
+.item {
+  font-size: clamp(1.0625rem, 1.7vw, 1.375rem);
+  font-weight: 500;
+  letter-spacing: var(--tr-heading);
+  color: var(--c-ink-soft);
+  opacity: 0.75;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.item:hover {
+  opacity: 1;
+}

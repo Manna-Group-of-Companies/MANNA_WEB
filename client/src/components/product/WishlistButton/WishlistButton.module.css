@@ -1,0 +1,70 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  color: var(--c-ink);
+  transition:
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.button:active {
+  transform: scale(0.94);
+}
+
+.heart {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+/* ── Icon: the disc that floats on a product card ──────────────── */
+.icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--c-line-strong);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+.icon:hover,
+.icon:focus-visible {
+  border-color: var(--c-brand);
+  color: var(--c-brand);
+}
+
+.icon[data-saved='true'] {
+  border-color: var(--c-brand);
+  color: var(--c-brand);
+}
+
+/* ── Full: the bordered button on a detail page ────────────────── */
+.full {
+  min-height: 52px;
+  padding-inline: var(--sp-5);
+  border-radius: var(--r-btn);
+  border: 1px solid var(--c-line-strong);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+}
+
+.full:hover,
+.full:focus-visible {
+  border-color: var(--c-brand);
+  color: var(--c-brand);
+}
+
+.full[data-saved='true'] {
+  border-color: var(--c-brand);
+  color: var(--c-brand);
+}
+
+.label {
+  white-space: nowrap;
+}

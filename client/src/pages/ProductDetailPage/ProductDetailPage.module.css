@@ -1,0 +1,237 @@
+/* The split below carries the lede, so the masthead keeps only the crumbs
+   and the title. */
+.head {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.hero {
+  padding-block: clamp(2rem, 4vw, 3rem) clamp(3rem, 6vw, 5rem);
+  background: var(--c-paper);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  align-items: start;
+}
+
+/* ── Artwork ───────────────────────────────────────────────────── */
+.stage {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--c-surface-2);
+}
+
+.art,
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.badge {
+  position: absolute;
+  top: var(--sp-4);
+  left: var(--sp-4);
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--r-sm);
+  background: var(--c-inverse);
+  color: var(--c-on-ink);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Detail column ─────────────────────────────────────────────── */
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.summary {
+  font-size: var(--fs-lede);
+  color: var(--c-ink);
+}
+
+.description {
+  color: var(--c-ink-muted);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--sp-4);
+  padding-block: var(--sp-5);
+  border-block: 1px solid var(--c-line);
+}
+
+.fact dt,
+.factLabel {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+}
+
+.fact dd {
+  margin-top: 0.35rem;
+  font-size: var(--fs-sm);
+  color: var(--c-ink);
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: var(--sp-3);
+}
+
+.pill {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-pill);
+  font-size: var(--fs-xs);
+  color: var(--c-ink-soft);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-top: var(--sp-2);
+}
+
+.note {
+  font-size: var(--fs-sm);
+  color: var(--c-ink-faint);
+}
+
+/* ── Specification band ────────────────────────────────────────── */
+.specsBand {
+  padding-block: clamp(3rem, 6vw, 5rem);
+  border-top: 1px solid var(--c-line);
+  background: var(--c-surface);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.columnTitle {
+  font-size: var(--fs-h3);
+}
+
+/* Second and later headings in a column need air above them. */
+.columnTitle:not(:first-child) {
+  margin-top: var(--sp-4);
+}
+
+.specs {
+  display: grid;
+}
+
+.specRow {
+  display: grid;
+  grid-template-columns: minmax(9rem, 40%) 1fr;
+  gap: var(--sp-4);
+  padding-block: 0.85rem;
+  border-bottom: 1px solid var(--c-line);
+  font-size: var(--fs-sm);
+}
+
+.specRow:first-child {
+  border-top: 1px solid var(--c-line);
+}
+
+.specLabel {
+  color: var(--c-ink-faint);
+}
+
+.specValue {
+  color: var(--c-ink);
+}
+
+.applications {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.application {
+  position: relative;
+  padding-left: 1.2rem;
+  font-size: var(--fs-sm);
+  color: var(--c-ink-soft);
+}
+
+.application::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 1px;
+  background: var(--c-brand);
+}
+
+/* ── Related ───────────────────────────────────────────────────── */
+.related {
+  padding-block: clamp(3rem, 6vw, 5rem);
+  background: var(--c-paper);
+}
+
+.relatedHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+
+.relatedTitle {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-display);
+  letter-spacing: var(--tr-display);
+}
+
+.relatedLink {
+  font-size: var(--fs-sm);
+  color: var(--c-ink-muted);
+  transition: color var(--dur) var(--ease);
+}
+
+.relatedLink:hover,
+.relatedLink:focus-visible {
+  color: var(--c-brand);
+}
+
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--product-card-min), 1fr)
+  );
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+
+@media (max-width: 900px) {
+  .split,
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}

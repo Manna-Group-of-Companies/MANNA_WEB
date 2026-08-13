@@ -1,0 +1,276 @@
+.body {
+  display: grid;
+  gap: var(--sp-5);
+  max-width: 68ch;
+}
+
+.lead {
+  font-size: var(--fs-lede);
+  line-height: var(--lh-body);
+  color: var(--c-ink);
+}
+
+.para {
+  line-height: var(--lh-body);
+  color: var(--c-ink-muted);
+}
+
+.heading {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-heading);
+  letter-spacing: var(--tr-heading);
+  color: var(--c-ink);
+}
+
+/* ── Pull quote ────────────────────────────────────────────────── */
+/* The brand rule is a pseudo-element rather than a border so it can draw
+   itself down the quote as the figure reveals. */
+.quoteWrap {
+  position: relative;
+  display: grid;
+  gap: var(--sp-4);
+  padding: var(--sp-6) 0 var(--sp-6) clamp(1.25rem, 3vw, 2rem);
+}
+
+.quoteWrap::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--c-brand);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--dur-slow) var(--ease) 120ms;
+}
+
+.quoteWrap[data-revealed='true']::before {
+  transform: scaleY(1);
+}
+
+.quote {
+  font-family: var(--font-serif);
+  font-size: clamp(1.375rem, 2.6vw, 2rem);
+  font-weight: var(--fw-display);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tr-heading);
+  color: var(--c-ink);
+}
+
+.source {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+}
+
+/* ── Numbered points ───────────────────────────────────────────── */
+.points {
+  display: grid;
+  gap: 0;
+}
+
+.point {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 0 var(--sp-4);
+  /* Bled out past the measure so the hover tint has room either side
+     without the copy shifting when it lands. */
+  padding: var(--sp-5) var(--sp-4);
+  margin-inline: calc(var(--sp-4) * -1);
+  border-top: 1px solid var(--c-line);
+  transition:
+    background var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+.point:last-child {
+  border-bottom: 1px solid var(--c-line);
+}
+
+.point:hover {
+  background: var(--c-surface);
+  border-color: var(--c-line-strong);
+}
+
+.pointIndex {
+  grid-row: span 2;
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--c-brand);
+  transition: transform var(--dur) var(--ease);
+}
+
+.point:hover .pointIndex {
+  transform: translateX(3px);
+}
+
+.pointTitle {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-heading);
+  letter-spacing: var(--tr-heading);
+  transition: color var(--dur) var(--ease);
+}
+
+.point:hover .pointTitle {
+  color: var(--c-brand);
+}
+
+.pointBody {
+  margin-top: var(--sp-3);
+  line-height: var(--lh-body);
+  color: var(--c-ink-muted);
+}
+
+/* ── Fact table ────────────────────────────────────────────────── */
+.facts {
+  display: grid;
+}
+
+.factRow {
+  display: grid;
+  grid-template-columns: minmax(11rem, 42%) 1fr;
+  gap: var(--sp-4);
+  padding: 0.85rem var(--sp-3);
+  margin-inline: calc(var(--sp-3) * -1);
+  border-bottom: 1px solid var(--c-line);
+  font-size: var(--fs-sm);
+  transition: background var(--dur) var(--ease);
+}
+
+.factRow:first-child {
+  border-top: 1px solid var(--c-line);
+}
+
+.factRow:hover {
+  background: var(--c-surface);
+}
+
+.factLabel {
+  color: var(--c-ink-faint);
+  transition: color var(--dur) var(--ease);
+}
+
+.factRow:hover .factLabel {
+  color: var(--c-ink-muted);
+}
+
+.factValue {
+  color: var(--c-ink);
+}
+
+/* ── Lists ─────────────────────────────────────────────────────── */
+.list {
+  columns: 2;
+  column-gap: var(--sp-6);
+}
+
+/* ── Timeline ──────────────────────────────────────────────────── */
+.timeline {
+  position: relative;
+  display: grid;
+}
+
+/* The rail draws down the page once the list is in view. */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--c-line);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.1s var(--ease) 100ms;
+}
+
+.timeline[data-revealed='true']::before {
+  transform: scaleY(1);
+}
+
+.milestone {
+  position: relative;
+  padding: 0 0 var(--sp-7) clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.milestone:last-child {
+  padding-bottom: 0;
+}
+
+/* The dot sits on the rail, half in and half out, and pops once its
+   milestone has arrived. */
+.milestone::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.45rem;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--c-brand);
+  transform: translateX(-50%) scale(0);
+  transition:
+    transform var(--dur) var(--ease) 160ms,
+    box-shadow var(--dur) var(--ease);
+}
+
+.milestone[data-revealed='true']::before {
+  transform: translateX(-50%) scale(1);
+}
+
+.milestone:hover::before {
+  transform: translateX(-50%) scale(1.45);
+  box-shadow: 0 0 0 5px rgba(244, 121, 32, 0.16);
+}
+
+.period {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase;
+  color: var(--c-brand);
+}
+
+.milestoneTitle {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-heading);
+  letter-spacing: var(--tr-heading);
+}
+
+.milestoneBody {
+  margin-top: var(--sp-3);
+  line-height: var(--lh-body);
+  color: var(--c-ink-muted);
+}
+
+@media (max-width: 640px) {
+  .point {
+    grid-template-columns: 1fr;
+    gap: var(--sp-2);
+  }
+
+  .pointIndex {
+    grid-row: auto;
+  }
+
+  .list {
+    columns: 1;
+  }
+}
+
+/* The rail and the dots are decoration; hold them still for anyone who
+   has asked for less movement. */
+@media (prefers-reduced-motion: reduce) {
+  .quoteWrap::before,
+  .timeline::before {
+    transform: none;
+  }
+
+  .milestone::before {
+    transform: translateX(-50%) scale(1);
+  }
+}

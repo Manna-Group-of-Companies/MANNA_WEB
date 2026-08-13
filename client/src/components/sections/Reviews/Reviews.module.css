@@ -1,0 +1,683 @@
+/* ------------------------------------------------------------------
+   Reviews — black band, black cards.
+
+   The section keeps its own token set (--r-*) rather than reading the
+   page's globals directly, so the whole band can be re-grounded from one
+   block. Every token below is scoped to .section and nothing leaks out,
+   including the two the star component reads (--star-fill /
+   --star-empty).
+
+   The accent is the Manna orange rather than the Google red the design
+   was drafted in — the brand carries every other accent on the site, and
+   one section going red would read as a different company. Google's own
+   red survives only in the G mark, where it means Google.
+
+   On black, a drop shadow does nothing: a card is separated by its edge
+   and by being a shade lighter than the ground, not by a shadow. The
+   hover "lift" is carried by the border and a low orange glow instead.
+------------------------------------------------------------------- */
+.section {
+  --r-ground: #050505;
+  /* A card is a lifted plane, so it sits a shade above the ground rather
+     than being the same black with a line drawn round it. */
+  --r-surface: #0e0e10;
+  --r-surface-2: #151517;
+  --r-ink: #ffffff;
+  --r-ink-2: #cfc9c6;
+  --r-ink-3: #8b8280;
+  --r-line: rgba(255, 255, 255, 0.1);
+  --r-line-soft: rgba(255, 255, 255, 0.07);
+  --r-accent: var(--c-brand);
+  --r-accent-deep: var(--c-brand);
+  --r-accent-wash: rgba(244, 121, 32, 0.14);
+
+  --star-fill: var(--r-accent);
+  --star-empty: rgba(255, 255, 255, 0.22);
+  --star-label: var(--r-ink-3);
+
+  --r-lift:
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    0 18px 40px -24px rgba(0, 0, 0, 0.9);
+  --r-lift-hover:
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    0 30px 60px -28px rgba(0, 0, 0, 0.95),
+    0 0 0 1px rgba(244, 121, 32, 0.28),
+    0 18px 44px -26px rgba(244, 121, 32, 0.4);
+
+  /* Compact cards: roughly two-thirds the old width, so the row shows half
+     as many again at any breakpoint and reads as a wall of testimony rather
+     than as three big panels. The gap tightens with them. */
+  --card-w: clamp(212px, 68vw, 248px);
+  --card-gap: clamp(0.75rem, 1.2vw, 1.1rem);
+
+  position: relative;
+  padding-block: var(--section-y);
+  background: var(--r-ground);
+  color: var(--r-ink);
+  border-top: 1px solid var(--c-line);
+  overflow: hidden;
+}
+
+/* A wide, faint warm bloom behind the row — the light source that makes
+   the white cards read as lit rather than pasted on. */
+.section::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: min(1100px, 130%);
+  aspect-ratio: 2 / 1;
+  translate: -50% -50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(244, 121, 32, 0.13),
+    rgba(244, 121, 32, 0) 66%
+  );
+  pointer-events: none;
+}
+
+/* ── Head ──────────────────────────────────────────────────────── */
+.head {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  max-width: 44rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase;
+  color: var(--r-accent-deep);
+}
+
+/* Short rules either side — a centred label with nothing around it floats. */
+.eyebrow::before,
+.eyebrow::after {
+  content: '';
+  width: clamp(18px, 5vw, 34px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--r-accent));
+  opacity: 0.6;
+}
+
+.eyebrow::after {
+  background: linear-gradient(90deg, var(--r-accent), transparent);
+}
+
+/* The one serif on the site. Testimony gets a human voice; everything the
+   interface says stays in the grotesque. */
+.title {
+  font-family: var(--font-serif);
+  font-variation-settings: 'opsz' 48;
+  font-weight: 300;
+  font-size: clamp(2.125rem, 5.2vw, 3.5rem);
+  line-height: 1.06;
+  letter-spacing: -0.021em;
+  color: var(--r-ink);
+  text-wrap: balance;
+}
+
+.score {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.15rem;
+  font-size: var(--fs-sm);
+  color: var(--r-ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.score strong {
+  font-weight: var(--fw-bold);
+  color: var(--r-ink);
+}
+
+.scoreDot {
+  width: 3px;
+  height: 3px;
+  border-radius: var(--r-pill);
+  background: var(--r-ink-3);
+}
+
+.loading {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--r-ink-3);
+}
+
+/* ── Drifting rail ─────────────────────────────────────────────── */
+.rail {
+  position: relative;
+  margin-top: clamp(2.25rem, 4.5vw, 3.5rem);
+}
+
+/* Full-bleed: the row runs past the text column and out of the frame,
+   which is what makes it read as continuous rather than as a widget in a
+   box. The container's own padding is cancelled out here. */
+.viewport {
+  width: 100vw;
+  margin-left: 50%;
+  translate: -50% 0;
+  /* Room for the hover lift and its shadow, which the mask would clip. */
+  padding-block: 1.75rem;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 clamp(5%, 8vw, 12%),
+    #000 calc(100% - clamp(5%, 8vw, 12%)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 clamp(5%, 8vw, 12%),
+    #000 calc(100% - clamp(5%, 8vw, 12%)),
+    transparent
+  );
+}
+
+.track {
+  display: flex;
+  /* Cards differ in height by design; centring keeps the row balanced
+     instead of pinning everything to a common top edge. */
+  align-items: center;
+  width: max-content;
+  /* No padding here, deliberately: a transform percentage resolves against
+     the border box, so padding would make -50% land short of one copy and
+     reintroduce the drift this layout exists to avoid. */
+}
+
+/* Too few cards to fill the frame, so the row does not drift — and a
+   left-aligned handful would sit in the mask's fade with the first card
+   half faded out. Centre them in the viewport instead. */
+.track:not([data-drifting='true']) {
+  width: 100%;
+  justify-content: center;
+}
+
+/* The gap rides on every card, including the last; dropping it here keeps
+   a centred row optically centred rather than half a gap to the left. */
+.track:not([data-drifting='true']) .item:last-child {
+  margin-right: 0;
+}
+
+.track[data-drifting='true'] {
+  animation: review-drift var(--drift-duration, 60s) linear infinite;
+  /* Transform-only, composited — the row stays on the GPU. */
+  will-change: transform;
+}
+
+/* Stops mid-travel and picks up from the same place — no snap, no reset. */
+.track[data-paused='true'] {
+  animation-play-state: paused;
+}
+
+/* Exactly one copy of travel, so a lap ends on a frame indistinguishable
+   from its start. Linear is not a stylistic choice: easing the loop itself
+   would slow into the wrap and lurch out of it, which is the visible jump
+   the two-copy track exists to remove. The easing in this design lives on
+   the hover and reveal transitions instead. */
+@keyframes review-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* The gap rides on the card rather than the track: that makes one card
+   plus one gap the repeating unit, so half the track is exactly one copy.
+   With `gap` on the flex container the track carries one gap fewer than it
+   needs, and every lap slips by half a gap. */
+.item {
+  flex: none;
+  width: var(--card-w);
+  margin-right: var(--card-gap);
+}
+
+/* ── Card ──────────────────────────────────────────────────────── */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.05rem;
+  padding: clamp(1.35rem, 2vw, 1.75rem);
+  border: 1px solid var(--r-line);
+  border-radius: 20px;
+  background: var(--r-surface);
+  box-shadow: var(--r-lift);
+  transition:
+    transform 420ms var(--ease),
+    box-shadow 420ms var(--ease),
+    border-color 420ms var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-6px) scale(1.022);
+  box-shadow: var(--r-lift-hover);
+  border-color: var(--r-accent-wash);
+}
+
+/* The reader's own card, so they can find it in a moving row. */
+.card[data-mine='true'] {
+  border-color: var(--r-accent);
+}
+
+/* ── Compact card ──────────────────────────────────────────────── */
+/* Same anatomy at rail size: tighter rhythm, smaller type, and the
+   comment held to five lines so one long review cannot stretch a card
+   out of the row. */
+.cardSm {
+  gap: 0.7rem;
+  padding: 1rem 1.05rem;
+  border-radius: 15px;
+}
+
+.cardSm .cardHead {
+  gap: 0.6rem;
+}
+
+.cardSm .name {
+  font-size: 0.875rem;
+  line-height: 1.3;
+}
+
+.cardSm .meta {
+  font-size: 0.6875rem;
+}
+
+.cardSm .googleMark {
+  width: 11px;
+  height: 11px;
+}
+
+.cardSm .comment {
+  font-variation-settings: 'opsz' 14;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  overflow: hidden;
+}
+
+.cardSm .cardFoot {
+  padding-top: 0.65rem;
+  font-size: 0.6875rem;
+}
+
+.cardSm .verified,
+.cardSm .sampleTag {
+  padding-block: 0.15rem;
+  font-size: 0.625rem;
+}
+
+/* The ring scales with the disc, or it reads as a border at this size. */
+.cardSm .avatar,
+.cardSm .avatarFallback {
+  box-shadow:
+    0 0 0 2px var(--r-surface),
+    0 0 0 3px var(--r-line);
+}
+
+/* A smaller card should not lift as far — the same 6px on a card this
+   size reads as a jump rather than a lift. */
+.cardSm:hover {
+  transform: translateY(-4px) scale(1.015);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.avatar,
+.avatarFallback {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--r-pill);
+  /* A hairline ring floated off the card, so a photo of any colour still
+     reads as a disc against the card. */
+  box-shadow:
+    0 0 0 3px var(--r-surface),
+    0 0 0 4px var(--r-line);
+}
+
+.avatar {
+  object-fit: cover;
+  background: var(--r-surface-2);
+}
+
+.avatarFallback {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #6c5a51, #40352f);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: var(--fw-bold);
+  line-height: 1;
+}
+
+.who {
+  min-width: 0;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.9375rem;
+  font-weight: var(--fw-bold);
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  color: var(--r-ink);
+}
+
+.youTag {
+  padding: 0.05rem 0.4rem;
+  border-radius: var(--r-pill);
+  background: var(--r-accent);
+  color: var(--c-brand-on);
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+  color: var(--r-ink-3);
+}
+
+.googleMark {
+  width: 13px;
+  height: 13px;
+  flex: none;
+}
+
+.comment {
+  font-family: var(--font-serif);
+  font-variation-settings: 'opsz' 16;
+  font-size: 1.0625rem;
+  line-height: 1.62;
+  color: var(--r-ink-2);
+}
+
+.cardFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--r-line-soft);
+  font-size: var(--fs-xs);
+  color: var(--r-ink-3);
+}
+
+.verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem 0.2rem 0.35rem;
+  border-radius: var(--r-pill);
+  background: var(--r-accent-wash);
+  color: var(--r-accent-deep);
+  font-size: 0.6875rem;
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+}
+
+.verified svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* The placeholder counterpart to the Verified chip: same footprint, none
+   of the claim. Neutral rather than accent, so it does not read as a
+   badge the reviewer earned. */
+.sampleTag {
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--r-line);
+  border-radius: var(--r-pill);
+  color: var(--r-ink-3);
+  font-size: 0.6875rem;
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+}
+
+/* ── Controls ──────────────────────────────────────────────────── */
+/* Moving content has to be stoppable, so the row keeps one control even
+   though it is not something you page through. */
+.controls {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(1.25rem, 2.4vw, 1.75rem);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--r-line);
+  border-radius: var(--r-pill);
+  background: var(--r-surface);
+  color: var(--r-ink-2);
+  font-size: 0.6875rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  transition:
+    color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.toggle:hover,
+.toggle:focus-visible {
+  color: var(--r-accent-deep);
+  border-color: var(--r-accent-wash);
+  box-shadow: var(--r-lift);
+}
+
+.toggle svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* Shown only while the placeholder reviews are standing in. */
+.sampleNote {
+  margin-top: var(--sp-3);
+  text-align: center;
+  font-size: var(--fs-xs);
+  color: var(--r-ink-3);
+}
+
+/* ── Empty state ───────────────────────────────────────────────── */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  max-width: 34rem;
+  margin: clamp(2.25rem, 4.5vw, 3.5rem) auto 0;
+  padding: clamp(2rem, 4vw, 3rem);
+  border: 1px dashed var(--r-line);
+  border-radius: 20px;
+  background: var(--r-surface);
+  text-align: center;
+}
+
+.emptyTitle {
+  margin-top: var(--sp-2);
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  color: var(--r-ink);
+}
+
+.emptyBody {
+  font-size: var(--fs-sm);
+  color: var(--r-ink-2);
+  max-width: 40ch;
+}
+
+/* ── Write a review ────────────────────────────────────────────── */
+.formWrap {
+  max-width: 40rem;
+  margin: clamp(2.5rem, 5vw, 3.5rem) auto 0;
+}
+
+.form,
+.gate {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.5rem, 2.6vw, 2.25rem);
+  border: 1px solid var(--r-line);
+  border-radius: 20px;
+  background: var(--r-surface);
+  box-shadow: var(--r-lift);
+}
+
+.form {
+  gap: var(--sp-4);
+}
+
+.gate {
+  align-items: center;
+  gap: var(--sp-4);
+  text-align: center;
+}
+
+.gate .googleMark {
+  width: 24px;
+  height: 24px;
+}
+
+.gateText {
+  font-size: var(--fs-sm);
+  color: var(--r-ink-2);
+  max-width: 46ch;
+}
+
+.formHead {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.formTitle {
+  font-weight: var(--fw-bold);
+  color: var(--r-ink);
+}
+
+.formNote {
+  font-size: var(--fs-xs);
+  color: var(--r-ink-3);
+}
+
+.textarea {
+  width: 100%;
+  padding: var(--sp-3);
+  border: 1px solid var(--r-line);
+  border-radius: 12px;
+  background: var(--r-surface-2);
+  color: var(--r-ink);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  transition:
+    border-color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.textarea:focus {
+  border-color: var(--r-accent);
+  background: var(--r-surface-2);
+}
+
+.textarea::placeholder {
+  color: var(--r-ink-3);
+}
+
+.textarea:disabled {
+  opacity: 0.6;
+}
+
+.formFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.counter {
+  font-size: var(--fs-xs);
+  color: var(--r-ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  min-height: 1.25rem;
+  font-size: var(--fs-sm);
+  color: var(--r-ink-2);
+}
+
+.statusError {
+  color: var(--c-danger);
+}
+
+.statusSuccess {
+  color: var(--c-accent);
+}
+
+/* Motion is opt-out: the row holds still and becomes a plain scroller, so
+   the same cards are all still reachable. */
+@media (prefers-reduced-motion: reduce) {
+  .track[data-drifting='true'] {
+    animation: none;
+  }
+
+  .viewport {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .controls {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .section {
+    --card-w: min(82vw, 320px);
+  }
+
+  .comment {
+    font-size: 1rem;
+  }
+}
