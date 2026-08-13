@@ -10,7 +10,9 @@ import type {
  * In dev, Vite proxies `/api` to the Express server (see vite.config.ts).
  * In production set VITE_API_BASE_URL if the API lives on another origin.
  */
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
+// Trailing slash trimmed so a value like `https://api.example.com/` cannot
+// produce `//api/leads`, which some hosts redirect and CORS then rejects.
+const BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '');
 
 class ApiError extends Error {
   constructor(

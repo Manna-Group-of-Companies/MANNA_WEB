@@ -1,0 +1,15 @@
+{
+  // Without this file, `wrangler deploy` tries to auto-detect the framework and
+  // refuses to configure Vite 5 ("please update to at least 6.0.0"). An explicit
+  // config skips detection: the build already produced dist/, and this Worker
+  // does nothing but serve it.
+  "name": "manna-web",
+  "compatibility_date": "2026-08-13",
+  "assets": {
+    "directory": "./dist",
+    // src/lib/router.ts routes on real paths (/auth, /catalogue/...), so a hard
+    // refresh or a shared link on one of them must return index.html rather
+    // than a 404 and let the client router take it from there.
+    "not_found_handling": "single-page-application"
+  }
+}

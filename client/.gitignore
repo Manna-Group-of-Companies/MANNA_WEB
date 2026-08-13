@@ -5,4 +5,7 @@ dist-ssr
 .env
 .env.*
 !.env.example
+# The production API origin is public information, and committing it keeps
+# host-side builds working without extra dashboard config.
+!.env.production
 .vite
