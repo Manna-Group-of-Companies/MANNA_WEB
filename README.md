@@ -1,279 +1,255 @@
-# Manna Rubber Products — Tyre Retreading
+# Manna Website
 
-A redesign of [mannarubber.com/our-products/tyre-retreading](https://www.mannarubber.com/our-products/tyre-retreading)
-as a premium, interactive, conversion-focused industrial page.
+Marketing site for Manna Rubber, built in the Squarespace design language:
+oversized tight-tracked headlines, black pill CTAs, warm off-white section
+bands, a drifting product carousel, and a wide multi-column footer.
 
-**Stack:** Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Framer Motion · lucide-react
-
----
+- **client** — React 18 + TypeScript + Vite, CSS Modules, no UI framework
+- **server** — Express 4 + TypeScript, layered (routes → controller → service → repository)
 
 ## Quick start
 
 ```bash
-npm install
-npm run assets     # generates branded placeholder artwork (already committed)
-npm run dev        # http://localhost:3000
+npm run install:all      # installs client and server dependencies
+
+npm run dev:server       # terminal 1 → http://localhost:4000
+npm run dev:client       # terminal 2 → http://localhost:5173
 ```
 
-| Script | Does |
-| --- | --- |
-| `npm run dev` | Dev server |
-| `npm run build` | Production build |
-| `npm start` | Serve the production build |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run assets` | Regenerate placeholder SVG artwork |
-| `npm run clean` | Delete `.next` and `.next-dev` |
+Vite proxies `/api/*` to the server, so the lead form works in development with
+no extra configuration. Copy `client/.env.example` and `server/.env.example` to
+`.env` if you need to change ports or origins.
 
-> **Dev and production builds use separate output directories** — `next dev`
-> writes to `.next-dev`, `next build` writes to `.next`. Sharing one folder lets
-> a production client manifest leak into the dev server and fail with
-> `Could not find the module …segment-explorer-node.js#SegmentViewNode in the
-> React Client Manifest`. Configured in [`next.config.ts`](next.config.ts);
-> hosting is unaffected because production still emits to `.next`.
+## Google sign-in
 
----
+`/login` and `/signup` are the same page in two moods. Google is the only
+identity provider — there are no passwords anywhere in this codebase, and a
+first-time Google account is signed up rather than turned away.
 
-## Before you go live
+**1. Create an OAuth client.** In the
+[Google Cloud console](https://console.cloud.google.com/apis/credentials) →
+_Create credentials_ → _OAuth client ID_ → _Web application_:
 
-Three things need real content. Everything else is production-ready.
+| Field                     | Development             | Production                 |
+| ------------------------- | ----------------------- | -------------------------- |
+| Authorised JavaScript origins | `http://localhost:5173` | `https://your-domain.com`  |
+| Authorised redirect URIs  | not needed              | not needed                 |
 
-### 1. Hero video *(optional but recommended)*
+The button uses the ID-token flow, so there is no redirect URI and the client
+**secret is never used** — only the client id, which is safe in the browser.
 
-Drop footage at:
-
-```
-public/videos/hero-retreading.webm   ← preferred
-public/videos/hero-retreading.mp4    ← fallback
-```
-
-No file is needed for the page to work — the hero falls back to a branded
-poster with the particle field and floating tyre graphics over it, and the
-`<video>` element hides itself silently on error.
-
-Keep it short (8–15s), muted, and under ~4 MB.
-
-### 2. The real logo vector
-
-The brand lockup currently renders as an **inline SVG approximation** built from
-the loaded display font — outlined ellipse, "MA"/"A" in orange, "NN" in
-graphite, "Group" bottom-right. It's on-brand but it is *not* your actual
-letterforms.
-
-To use the real mark:
-
-1. Save the vector as `public/brand/manna-group.svg`
-2. In [`src/components/ui/Logo.tsx`](src/components/ui/Logo.tsx), set
-   `REAL_LOGO = true` and update `INTRINSIC` to your file's real dimensions
-   (it only establishes the aspect ratio)
-
-Nothing else changes — `<Logo />` is sized entirely by CSS height classes at
-each call site (`h-12 lg:h-16` in the header, `h-14 lg:h-16` in the footer,
-`h-20 sm:h-24` on the loader) and width follows the ratio. Never pass an inline
-height: it beats the responsive classes. Two more notes:
-
-- **Dark mode.** The graphite half of the logo disappears on the near-black
-  header, footer and loader. The inline version solves this with
-  `--logo-graphite`, which flips to near-white under `.dark`. If your vector
-  hard-codes `#4a4a4c`, either change those fills to `currentColor` or supply a
-  second light-on-dark file and point `darkSrc` at it.
-- **Square contexts.** The wordmark is ~2:1 and can't square well, so the
-  favicon and app icons use the MANNA "M" on an orange tile. The M is drawn as
-  a stroked polyline (round caps and joins) rather than set in a font, so it
-  needs no webfont and stays exact at 16px. Geometry lives in two places that
-  must stay in sync: `logoMark()` in
-  [`scripts/generate-assets.mjs`](scripts/generate-assets.mjs) and `LogoMark`
-  in [`Logo.tsx`](src/components/ui/Logo.tsx).
-
-  `npm run assets` rasterises it with sharp into the full icon set:
-
-  | File | Used by |
-  | --- | --- |
-  | `favicon.ico` | legacy browsers (16/32/48 in one file) |
-  | `icon.svg` | modern browsers |
-  | `apple-icon.png` (180) | iOS home screen |
-  | `icon-192.png`, `icon-512.png` | Android / PWA, via `manifest.webmanifest` |
-
-**Brand colours** are sampled from the logo image, not from a brand guide:
-`--color-brand-500: #f47920` (orange) and `--color-ink-700: #4a4a4c`
-(graphite), both in [`globals.css`](src/app/globals.css). If you have exact
-values, change those two lines — the rest of the palette derives from them.
-
-### 3. Photography
-
-Replace the generated SVGs, keeping the same paths so nothing else changes:
-
-```
-public/images/products/{pctr,pctr-radial,pctr-nylon,hot,pctr-off-road}.svg
-public/images/gallery/{factory,manufacturing,products,quality,export}-0*.svg
-public/images/hero-poster.svg
-public/images/og.svg
-```
-
-Real raster photos (`.jpg`/`.webp`) get automatic AVIF/WebP conversion and
-responsive `srcset` from `next/image` — SVGs are served as-is. If you switch
-extensions, update the paths in `src/data/products.ts` and `src/data/content.ts`.
-
-### 4. ⚠️ Testimonials
-
-`src/data/content.ts` → `testimonials` are **placeholder copy**, each flagged
-`placeholder: true`. They are attributed by role and region only (no invented
-individuals), but they are still not real quotes. **Replace them with approved
-customer quotes, or delete the `<Testimonials />` section from
-`src/app/page.tsx`, before publishing.**
-
----
-
-## Enquiry form delivery
-
-The form posts to `POST /api/enquiry`. Copy `.env.example` to `.env.local` and
-configure **one** channel:
+**2. Wire the id into both packages.** It has to be the same value on both
+sides; the server rejects any token minted for a different client.
 
 ```bash
-# Option A — any webhook (Zapier, Make, Slack, your CRM)
-ENQUIRY_WEBHOOK_URL="https://hooks.example.com/..."
+# client/.env
+VITE_GOOGLE_CLIENT_ID=1234567890-abc.apps.googleusercontent.com
 
-# Option B — email via Resend
-RESEND_API_KEY="re_..."
-ENQUIRY_TO_EMAIL="mail@hi-techtreads.com"
-ENQUIRY_FROM_EMAIL="website@yourverifieddomain.com"
+# server/.env
+GOOGLE_CLIENT_ID=1234567890-abc.apps.googleusercontent.com
+SESSION_SECRET=$(node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))")
 ```
 
-With neither set, the endpoint returns `501` and the form **falls back to
-opening the visitor's mail client or WhatsApp pre-filled with their enquiry** —
-so no lead is silently swallowed. A hidden honeypot field drops bot submissions.
+Restart both dev servers — Vite only reads `VITE_*` at startup. Without a
+client id the page renders a setup notice instead of a broken button.
 
----
+**How it works.** Google's script renders the branded button, which hands the
+browser an ID token. The client posts it to `/api/auth/google`, where the
+server verifies the signature against Google's published keys and checks the
+issuer, audience, expiry and `email_verified` before trusting anything in it.
+It then issues its own HMAC-signed session cookie (`HttpOnly`, `SameSite=Lax`),
+so the Google token is never stored or replayed. `requireAuth()` in
+`server/src/middleware` is the gate for the first route that needs a signed-in
+user.
 
-## Content model
+**In production** set `COOKIE_SECURE=true` (the default when `NODE_ENV` is
+`production`) and serve over HTTPS, and make sure `CORS_ORIGIN` lists the site's
+real origin — the session cookie will not survive otherwise.
 
-All copy and catalogue data lives in `src/data/` — no content is hard-coded in
-components.
+## Reviews
 
-| File | Contains |
-| --- | --- |
-| `site.ts` | Company facts, address, phone, markets, certifications, stats |
-| `products.ts` | The five ranges and every published size |
-| `content.ts` | Process steps, benefits, comparison, industries, testimonials, gallery, FAQ |
-| `nav.ts` | Navigation and mega-menu structure |
+The homepage carries a drifting row of customer reviews above the closing CTA,
+each card showing the reviewer's Google name, photo and star rating. Writing
+one needs a signed-in Google account, which is the whole point: the name and
+photo on a card come from Google rather than from a text field, so there is no
+anonymous entry to moderate.
 
-### Catalogue accuracy
+**It is the one place a serif appears** — a wall of testimony from other people
+should not look like the rest of the page talking about itself. The face is
+Newsreader (`--font-serif`), used for the headline and the review quotes only.
 
-Category names and **all 43 size codes** are taken verbatim from the existing
-page:
+The band keeps its own token set (`--r-*` at the top of `Reviews.module.css`)
+rather than reading globals directly, so the whole section can be re-grounded
+from one block — it was drafted on white and moved to black by editing those
+ten lines. `StarRating` reads `--star-fill` / `--star-empty` for the same
+reason: the page-level line colour is invisible on a light ground.
 
-| Range | Sizes |
-| --- | --- |
-| PCTR (Pre-Cure Tread Rubber) | 23 |
-| PCTR Radial | 4 |
-| PCTR Nylon | 2 |
-| HOT (Hot Retreading) | 14 |
-| PCTR Off Road | made to order |
+### Placeholder reviews
 
-Two fields are **presentation aids, not manufacturer claims**, and are labelled
-as such in the UI:
+`client/src/data/sampleReviews.ts` holds six invented reviews that stand in
+while the section is empty. Two rules keep them honest, both enforced in
+`useReviews`: they appear **only** when there are no real reviews at all, so an
+invented card is never shown beside a genuine one; and while they show, the
+cards say "Example review" instead of "Signed in with Google", carry an
+"Example" chip rather than "Verified", and the section says so under the row.
 
-- **`fitment`** — groups each size into a vehicle class (Truck & Bus, LCV,
-  Passenger, OTR & Earthmover, Small / 3-Wheeler) so the catalogue can be
-  filtered and sorted. Derived from the size code.
-- **`performance`** — 0–100 scores comparing our own ranges against each other,
-  to support range selection. Surfaced with an explicit "indicative, not a
-  laboratory result" caveat everywhere it appears.
+**Set `SHOW_SAMPLE_REVIEWS` to `false` before the site goes in front of
+customers.** Invented testimonials on a commercial page are misleading
+advertising under the UK DMCC Act, the EU Omnibus Directive and the FTC's rule
+on fake reviews.
 
-Pricing is **"on request"** throughout, matching the source page.
+**The row loops continuously**, on the same CSS device as the hero bands: the
+cards are rendered twice and the track is animated a flat `-50%`, so the end of
+a lap is a frame indistinguishable from its start. Two details keep the seam
+invisible — the gap rides on the card as `margin-right` rather than on the
+track as `gap`, which makes one card plus one gap the repeating unit and half
+the track exactly one copy; and the row only drifts once a copy is measured
+wide enough to cover the viewport, since a short copy would run out of cards
+before the lap came round. Hover or focus pauses it where it stands via
+`animation-play-state`, so nothing snaps, and there is a pause control for
+anyone who wants it stopped. Under `prefers-reduced-motion` it holds still and
+becomes an ordinary horizontal scroller.
 
----
+An account holds **one** review — posting again edits the existing one, and the
+reader's own card is outlined and tagged in the rail. Reviews append to
+`server/data/reviews.jsonl`, last line per author winning, so the file doubles
+as an edit history.
 
-## Architecture
+The section starts empty; it fills as real customers write. Nothing is seeded,
+because a fabricated review is worse than an empty rail.
+
+## Other commands
+
+| Command             | What it does                                        |
+| ------------------- | --------------------------------------------------- |
+| `npm run build`     | Type-checks and builds both packages                 |
+| `npm run typecheck` | Type-checks both packages without emitting           |
+| `npm start`         | Runs the compiled server from `server/dist`          |
+
+To serve the built site and the API from one process, build the client, then
+set `SERVE_CLIENT=true` in `server/.env` and run `npm start`.
+
+## Folder structure
 
 ```
-src/
-├─ app/
-│  ├─ layout.tsx          metadata, fonts, JSON-LD, theme bootstrap, providers
-│  ├─ page.tsx            section composition
-│  ├─ globals.css         design tokens, dark mode, utilities, keyframes
-│  ├─ robots.ts · sitemap.ts
-│  └─ api/enquiry/route.ts
-├─ components/
-│  ├─ layout/             Navbar (mega menu), SearchDialog, Breadcrumb,
-│  │                      Footer, FloatingCTA, StickyContactBar, PageLoader
-│  ├─ sections/           Hero, Products, ProductExplorer, Process, Benefits,
-│  │                      Comparison, Industries, Trust, Testimonials,
-│  │                      Gallery, FAQ, Contact, ParticleField, FloatingTyres
-│  ├─ ui/                 Button, Badge, Modal, Tabs, Accordion, Toast, Reveal,
-│  │                      Counter, Tilt, Marquee, Section (heading/bar/gauge),
-│  │                      ThemeToggle, Icon
-│  └─ QuoteContext.tsx    "Request Quote" → scrolls to and pre-fills the form
-├─ data/                  all content (above)
-└─ lib/                   utils, motion variants, hooks, icons, datasheet, schema
+MANNA_WEBSITE/
+├─ package.json                  workspace-level convenience scripts
+│
+├─ client/
+│  ├─ index.html                 Vite entry document, fonts and meta tags
+│  ├─ vite.config.ts             @/ alias, dev proxy to the API
+│  ├─ tsconfig.json              strict TS, path mapping
+│  ├─ public/favicon.svg
+│  └─ src/
+│     ├─ main.tsx                React root, AuthProvider
+│     ├─ App.tsx                 skip link, /login + /signup routes, layout
+│     ├─ pages/
+│     │  ├─ HomePage/            section order for the homepage
+│     │  └─ AuthPage/            sign in / sign up, Google only
+│     ├─ context/AuthContext.tsx session state and sign-in/out actions
+│     ├─ components/
+│     │  ├─ layout/              Logo, AnnouncementBar, Header, Footer
+│     │  ├─ auth/                GoogleSignInButton
+│     │  ├─ sections/            Hero, HeroCarousel, StatsBand,
+│     │  │                       Capabilities, ProductShowcase,
+│     │  │                       IndustriesStrip, QualitySplit,
+│     │  │                       Testimonial, LeadCta
+│     │  └─ ui/                  Button, Container, SectionHeading,
+│     │                          TickList, ArrowLink, PatternArt, Reveal
+│     ├─ hooks/                  useReveal, useCountUp, useScrolled,
+│     │                          useLockBodyScroll, useLeadForm,
+│     │                          usePathname, useGoogleIdentity
+│     ├─ data/                   all site copy (site.ts, products.ts,
+│     │                          sections.ts)
+│     ├─ lib/                    api client, router, cn(), email validation
+│     ├─ types/                  content, lead, auth and GSI models
+│     └─ styles/                 tokens.css, base.css, utilities.css
+│
+└─ server/
+   ├─ tsconfig.json
+   ├─ data/                      leads.jsonl, users.jsonl (created on use)
+   └─ src/
+      ├─ index.ts                bootstrap, listen, graceful shutdown
+      ├─ app.ts                  Express assembly, CORS, static client
+      ├─ config/env.ts           typed environment parsing
+      ├─ routes/                 apiRouter, lead routes, auth routes
+      ├─ controllers/            HTTP layer for leads and auth
+      ├─ services/               lead logic, Google verifier, auth logic
+      ├─ repositories/           append-only JSONL stores
+      ├─ validators/             request body validation
+      ├─ middleware/             rateLimit, requireAuth, notFound,
+      │                          errorHandler
+      ├─ types/                  shared API, lead and auth types
+      └─ utils/                  logger, AppError, session, cookies
 ```
 
-### Design system
+Each component lives in its own folder next to its `.module.css`, so styles are
+scoped and a component can be moved or deleted in one piece.
 
-Brand is **orange + white**, with near-black surfaces carrying the dark theme.
-Tokens live in `globals.css`:
+## Conventions
 
-- `--color-brand-50…950` — orange ramp, `brand-500` (`#ff6a00`) is primary
-- `--bg`, `--surface`, `--fg`, `--border`, `--glass` — semantic surfaces that
-  swap under `.dark`
-- `--text-fluid-*` — `clamp()` type scale, mobile-first
-- Utilities: `.glass`, `.glass-strong`, `.text-gradient-brand`, `.glow-blob`,
-  `.bg-grid`, `.skeleton`, `.container-page`, `.section-y`
+- **Copy lives in `src/data`.** Sections render from typed arrays, so editing
+  headlines and product blurbs never means touching JSX.
+- **Design tokens live in `src/styles/tokens.css`.** Colour, type scale,
+  spacing, radii and motion are all variables — retheming is one file.
+- **Artwork is CSS-drawn.** `PatternArt` stands in for product photography so
+  the site renders with no external assets. Swap it for `<img>` once real
+  photography exists; no layout depends on its internals.
+- **Accessibility.** Skip link, roving-tabindex tab strip in the product
+  showcase, `aria-live` form status, visible focus rings, and every animation
+  respects `prefers-reduced-motion`.
 
-Dark mode is class-based on `<html>`, applied by a blocking inline script
-before first paint (no flash), and read through `useSyncExternalStore` so
-there is no hydration mismatch.
+## API
 
-### Datasheets
+| Method | Route                | Body                                     | Notes                                     |
+| ------ | -------------------- | ---------------------------------------- | ----------------------------------------- |
+| `GET`  | `/api/health`        | —                                        | Liveness probe                            |
+| `POST` | `/api/leads`         | `{ "email": string, "source"?: string }` | 5 requests / 10 min / IP                  |
+| `POST` | `/api/auth/google`   | `{ "credential": string }`               | Google ID token in, session cookie out    |
+| `GET`  | `/api/auth/me`       | —                                        | `{ user }` or `{ user: null }`, always 200 |
+| `POST` | `/api/auth/logout`   | —                                        | Clears the session cookie                 |
+| `GET`  | `/api/reviews`       | —                                        | Public; flags the reader's own review     |
+| `POST` | `/api/reviews`       | `{ "rating": 1-5, "comment": string }`   | Signed in only; re-posting edits          |
 
-"Download Datasheet" generates a styled, print-ready HTML document client-side
-(`src/lib/datasheet.ts`) — no PDF service, no server round-trip, works on a
-fully static export. Users get a PDF via **Print → Save as PDF**.
+Leads append to `server/data/leads.jsonl`, users to `users.jsonl` and reviews to
+`reviews.jsonl`. Swap the repository modules for a database client and nothing
+above them changes.
 
----
+## Site content
 
-## Accessibility
+The copy and catalogue come from the legacy site at
+[mannarubber.com](https://www.mannarubber.com/). The full extraction — every
+page, the old sitemap, and the migration gaps — is in
+[`legacy-site-content.md`](legacy-site-content.md) at the repo root.
 
-- Single `<h1>`; landmarks and heading hierarchy throughout
-- Skip link; visible brand focus ring on every interactive element
-- Tabs, accordions and the carousel follow WAI-ARIA authoring patterns with
-  full arrow-key support
-- Modals trap focus, restore it on close, and close on <kbd>Esc</kbd>
-- Animated counters expose the final value to screen readers, not the tick-up
-- Form errors use `aria-invalid` + `aria-describedby`, and focus moves to the
-  first invalid field on submit
-- `prefers-reduced-motion` disables the particle canvas, page loader, carousel
-  autoplay, and all decorative motion
+`client/src/data/catalogue.ts` carries all 91 products across the five real
+lines: 44 tread rubber patterns, 5 retreading processes, 16 compound grades, 5
+reclaim grades and 21 moulded goods. The repetitive lines are built from seed
+arrays through small factory functions, so adding a pattern is one line rather
+than forty.
 
-## Performance
+**The old site published names and prices-on-request but almost no technical
+data.** The specs in the catalogue therefore carry only what the business
+actually declared — brand, origin, HSN 4002 on compounds, minimum enquiry
+quantity of one. Pattern dimensions, gauges, hardness figures and mileage
+claims are deliberately absent. Get them from the works before adding them;
+invented figures on a manufacturing catalogue are a warranty problem, not a
+copy problem.
 
-- Static prerender; ~228 kB first-load JS for the whole page
-- Particle canvas is DPR-aware, capped, and pauses via `IntersectionObserver`
-  and `visibilitychange`
-- Below-fold images lazy-load; `next/image` handles AVIF/WebP and `srcset`
-- `optimizePackageImports` for `lucide-react` and `framer-motion`
-- Long-cache immutable headers on static assets (`next.config.ts`)
+## Before going live
 
-## SEO
+Outstanding items, all flagged in `legacy-site-content.md`:
 
-- Full metadata, canonical, Open Graph, Twitter card
-- JSON-LD graph: `Organization`, `WebPage`, `BreadcrumbList`, `ItemList` of all
-  five `Product`s with sizes and price-on-request offers, and `FAQPage`
-- `sitemap.xml` and `robots.txt` generated at build
-
-Set `NEXT_PUBLIC_SITE_URL` in production so canonical, OG and sitemap URLs
-resolve against the right origin.
-
----
-
-## Deployment
-
-Deploys as-is to Vercel, or any Node host:
-
-```bash
-npm run build && npm start
-```
-
-The only dynamic route is `/api/enquiry`. If you'd rather host fully statically,
-drop that route and point the form at a third-party form endpoint — the
-mail/WhatsApp fallback already covers the no-backend case.
+- **Timeline milestones** — image-only on the old site, so the years and events
+  could not be scraped. Needs the original graphic or the business.
+- **Per-pattern tread copy** — only VIKING has a real description. The other 43
+  patterns fall back to a shared honest placeholder.
+- **Photography** — every tile still renders `PatternArt`. Swap for `<img>`
+  once real product photography exists.
+- **"Established" conflict** — body copy says three decades, the export profile
+  says the Pvt. Ltd. was established in 2020. The stats band says `30+`.
+- ~~**Two email addresses**~~ — settled: `site.email` is `mail@hi-techtreads.com`
+  and is the only address the site publishes. `salesEmail` is gone.
+- **Legal pages** — the old Privacy Policy and Terms are LINKER.store template
+  boilerplate. `legalLinks` in `site.ts` still point at `#`.
+- **Sample reviews** — set `SHOW_SAMPLE_REVIEWS` to `false` (see above).
