@@ -169,8 +169,12 @@ export function Header() {
         </nav>
 
         <div className={styles.right}>
+          {/* A 21px heart is half the target a finger needs, so it opts into
+              the hit-area helper in utilities.css — which grows the target
+              without moving the icon or taking any room in the bar. */}
           <a
             className={styles.wishlist}
+            data-touch-target=""
             aria-label={
               count === 0
                 ? 'Wishlist, empty'
@@ -284,22 +288,27 @@ export function Header() {
                 Log in
               </a>
             ))}
-          <Button href="/#contact" size="md">
-            Get started
-          </Button>
-        </div>
+          {/* Wrapped so a narrow bar can retire the call to action without
+              the header reaching into the Button module for its class. The
+              burger menu carries the same link. */}
+          <span className={styles.cta}>
+            <Button href="/#contact" size="md">
+              Get started
+            </Button>
+          </span>
 
-        <button
-          className={styles.burger}
-          type="button"
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <span />
-          <span />
-        </button>
+          <button
+            className={styles.burger}
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <span />
+            <span />
+          </button>
+        </div>
       </div>
 
       <div className={styles.mobileMenu} id="mobile-menu" hidden={!menuOpen}>

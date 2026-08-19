@@ -39,3 +39,16 @@
 .org {
   color: var(--c-on-ink-muted);
 }
+
+@media (max-width: 560px) {
+  .quote {
+    gap: var(--sp-5);
+  }
+
+  .text {
+    /* The clamp floor is 22px, which at 320px sets a pull quote four words
+       to the line. One step down puts it at six. */
+    font-size: 1.25rem;
+    line-height: 1.3;
+  }
+}

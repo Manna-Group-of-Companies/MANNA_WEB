@@ -65,7 +65,10 @@
 
 .facts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  /* `min(…, 100%)` as everywhere else in the codebase: a 160px floor in a
+     column narrower than 160px would otherwise size the track to the floor
+     and push the page sideways rather than collapsing to the column. */
+  grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr));
   gap: var(--sp-4);
   padding-block: var(--sp-5);
   border-block: 1px solid var(--c-line);
@@ -147,7 +150,7 @@
 
 .specRow {
   display: grid;
-  grid-template-columns: minmax(9rem, 40%) 1fr;
+  grid-template-columns: minmax(9rem, 40%) minmax(0, 1fr);
   gap: var(--sp-4);
   padding-block: 0.85rem;
   border-bottom: 1px solid var(--c-line);
@@ -222,9 +225,11 @@
 
 .relatedGrid {
   display: grid;
+  /* `min(…, 100%)` so a floor wider than the column — a 230px card in a
+     200px slot — collapses to the slot rather than overflowing the page. */
   grid-template-columns: repeat(
     auto-fill,
-    minmax(var(--product-card-min), 1fr)
+    minmax(min(var(--product-card-min), 100%), 1fr)
   );
   gap: clamp(1rem, 2vw, 1.75rem);
 }
@@ -232,6 +237,43 @@
 @media (max-width: 900px) {
   .split,
   .columns {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* One column below 480px — see ProductCard.module.css, which is where that
+   number is decided and where the card gives up its portrait ratio to suit a
+   full-width slot. */
+@media (max-width: 480px) {
+  .relatedGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  /* The label column has a 9rem floor, which is half the screen here. The
+     rows read as label-over-value instead, with the rule between them
+     still doing the separating. */
+  .specRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem;
+  }
+
+  .actions {
+    /* "Save to wishlist" and "Request a quote" are both long enough to wrap
+       at half width; stacked they stay on one line each. */
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .facts {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--sp-4) var(--sp-3);
+  }
+}
+
+@media (max-width: 400px) {
+  .facts {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

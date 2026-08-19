@@ -681,3 +681,70 @@
     font-size: 1rem;
   }
 }
+
+@media (max-width: 560px) {
+  .section {
+    /* Nearly the whole screen, so one card is what you read and the next is
+       clearly there to be reached. */
+    --card-w: min(84vw, 300px);
+  }
+
+  .title {
+    line-height: 1.1;
+  }
+
+  .score {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .textarea {
+    /* Safari zooms the page when a control under 16px takes focus, and never
+       zooms back out. */
+    font-size: 16px;
+  }
+
+  .formFoot {
+    /* The counter and the submit button end up on one cramped line
+       otherwise, with the button wrapping its own label. Stacked in source
+       order, so the count is read and the action is the last thing on the
+       card — and nearest the thumb. */
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--sp-4);
+  }
+
+  .counter {
+    text-align: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .avatar,
+  .avatarFallback {
+    width: 40px;
+    height: 40px;
+  }
+
+  .cardFoot {
+    /* "Verified" and the date do not fit side by side once the card is this
+       narrow; the chip keeps the line and the date drops under it. */
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+}
+
+/* The card lifts on hover; on a touchscreen that fires as a stuck state
+   after a tap and leaves one card raised in a moving row. */
+@media (hover: none) {
+  .card:hover,
+  .cardSm:hover {
+    transform: none;
+    box-shadow: var(--r-lift);
+    border-color: var(--r-line);
+  }
+
+  .card[data-mine='true']:hover {
+    border-color: var(--r-accent);
+  }
+}

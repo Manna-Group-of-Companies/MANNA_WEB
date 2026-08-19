@@ -101,7 +101,7 @@
 
 @media (max-width: 900px) {
   .split {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-6);
   }
 
@@ -109,5 +109,47 @@
      measure, so it keeps the full width of the container. */
   .rail {
     order: -1;
+  }
+}
+
+@media (max-width: 560px) {
+  /* Previous and Next sit at opposite ends of a row that is now too narrow
+     to hold two titles. Stacked, each keeps its own alignment so the pair
+     still reads as pointing in opposite directions. */
+  .pager {
+    flex-direction: column;
+    gap: var(--sp-4);
+  }
+
+  .pagerNext {
+    margin-left: 0;
+  }
+
+  .cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ctaText {
+    max-width: none;
+  }
+
+  .ctaActions {
+    flex-direction: column;
+  }
+}
+
+/* The pagers and the panel slide on hover; on a touchscreen that only ever
+   fires as a stuck state after a tap. */
+@media (hover: none) {
+  .pagerLink:hover,
+  .pagerNext:hover {
+    transform: none;
+  }
+
+  .cta:hover {
+    border-color: var(--c-line);
+    background: var(--c-surface);
+    box-shadow: none;
   }
 }

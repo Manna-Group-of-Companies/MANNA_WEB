@@ -68,3 +68,12 @@
 .label {
   white-space: nowrap;
 }
+
+@media (max-width: 560px) {
+  /* Matches the buttons it now stacks with — their padding steps down on a
+     phone (Button.module.css), and a 52px bar beside a 46px one reads as a
+     mistake. Still clear of the 44px touch target. */
+  .full {
+    min-height: 48px;
+  }
+}

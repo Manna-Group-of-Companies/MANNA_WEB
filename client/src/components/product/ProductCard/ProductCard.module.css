@@ -244,3 +244,72 @@
 .card:hover .arrow {
   transform: translateX(4px);
 }
+
+/* ── Narrow card ───────────────────────────────────────────────────
+   480px is where every grid that holds these cards drops to one column —
+   ProductsPage, WishlistPage and the related rail all carry the same rule
+   and all point back here, because this is the file that has an opinion
+   about it. Above 480 the auto-fill grid still finds room for two columns
+   of about 210px, which the card wears well; below it, a card is as wide as
+   the screen and the 292:410 portrait ratio would make it 500px tall — one
+   product per screenful.
+
+   So at that point the card lets go of the ratio and takes its height from
+   its contents. The art panel then needs a floor of its own: with no spare
+   height in the box, `flex: 1` has nothing left to distribute to it.
+------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .card {
+    aspect-ratio: auto;
+  }
+
+  .stage {
+    /* Tracks the screen so the panel stays roughly a third of the card at
+       any phone width, between a floor and a ceiling. */
+    min-height: clamp(10rem, 42vw, 15rem);
+  }
+}
+
+@media (max-width: 400px) {
+  .head {
+    /* The wishlist disc is 40px and the corner is tighter here. */
+    padding-right: 2.75rem;
+  }
+
+  .summary {
+    /* Two lines rather than three: the measure is narrow enough that three
+       lines of summary crowd out the artwork below them. */
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    min-height: calc(2 * 1.45em);
+  }
+
+  /* The chips sit over the artwork, and there is not room for two of them
+     side by side once the panel is this narrow — they overlap each other
+     rather than the picture. Keep the pair that straddle opposite corners. */
+  .chip[data-at='mid-left'],
+  .chip[data-at='mid-right'] {
+    display: none;
+  }
+
+  .chip {
+    max-width: 62%;
+    padding: 0.3rem 0.5rem;
+  }
+}
+
+/* A card cannot be hovered on a touchscreen, so the lift never happens and
+   the transform is dead weight. More to the point the sticky-hover most
+   mobile browsers apply after a tap leaves the card raised until you tap
+   somewhere else. */
+@media (hover: none) {
+  .card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .card:hover .frame,
+  .card:hover .arrow {
+    transform: none;
+  }
+}

@@ -23,7 +23,7 @@
 
 .inner {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: var(--sp-5);
   max-width: 1480px;
@@ -557,14 +557,23 @@
 }
 
 /* ── Burger ────────────────────────────────────────────────────── */
+/* A pass-through wrapper around the call to action. It exists so the
+   narrow-bar rules below have a header-owned class to hide, since the
+   button's own class belongs to the Button module. */
+.cta {
+  display: inline-flex;
+}
+
+/* Last item in the right-hand cluster, so it needs no margin of its own —
+   the cluster is already flushed right. */
 .burger {
   display: none;
+  flex: none;
   flex-direction: column;
   justify-content: center;
   gap: 5px;
   width: 40px;
   height: 40px;
-  margin-left: auto;
   padding: 0 8px;
 }
 
@@ -637,14 +646,26 @@
   color: var(--c-brand);
 }
 
+/* ── Narrow bar ─────────────────────────────────────────────────
+   The nav and the call to action move into the burger sheet. The wishlist
+   and the account chip stay out on the bar: both carry state the reader is
+   meant to see at a glance — a count and a face — and burying them behind a
+   menu means you cannot tell you are signed in without opening it.
+------------------------------------------------------------------- */
 @media (max-width: 1080px) {
   .inner {
-    grid-template-columns: 1fr auto;
+    /* `.nav` is gone, so the bar is logo | actions. */
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .nav,
-  .right {
+  .cta,
+  .quiet {
     display: none;
+  }
+
+  .right {
+    gap: clamp(0.9rem, 3vw, 1.5rem);
   }
 
   .burger {
@@ -655,9 +676,89 @@
     display: block;
     max-height: calc(100dvh - var(--header-h));
     overflow-y: auto;
+    /* Keeps a flick at the end of the list from carrying on into the page
+       behind the open sheet. */
+    overscroll-behavior: contain;
   }
 
   .mobileMenu[hidden] {
     display: none;
+  }
+}
+
+/* ── Tablet portrait ───────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* The avatar already says who is signed in, so the name is the part that
+     goes when the bar gets tight. The caret stays: it is 10px wide and it is
+     the only thing saying the chip opens something. */
+  .accountName {
+    display: none;
+  }
+}
+
+/* ── Phone ─────────────────────────────────────────────────────── */
+@media (max-width: 560px) {
+  .right {
+    gap: 0.85rem;
+  }
+
+  .heart {
+    width: 20px;
+    height: 20px;
+  }
+
+  .burger {
+    width: 36px;
+    height: 36px;
+    padding: 0 6px;
+  }
+
+  /* Anchored to the bar rather than to the avatar: at this width a menu
+     hung off a 28px chip is most of the screen anyway, so it may as well
+     line up with the gutter and take a sensible measure. */
+  .accountMenu {
+    right: 0;
+    min-width: 0;
+    width: min(17rem, calc(100vw - var(--wrap-pad) * 2));
+  }
+
+  .mobileMenu {
+    padding-top: var(--sp-4);
+    /* Clear of the home indicator on a gesture-navigation phone. */
+    padding-bottom: max(var(--sp-6), env(safe-area-inset-bottom));
+  }
+
+  .mobileLink {
+    padding: 0.8rem 0;
+    font-size: 1.15rem;
+  }
+
+  .mobileQuiet {
+    /* 8px of padding round 15px type is a 31px target; a finger wants 44. */
+    padding: var(--sp-3) var(--sp-4);
+  }
+}
+
+/* ── Landscape phone ───────────────────────────────────────────────
+   A sideways phone has the height of a letterbox, so the sheet has to be
+   scrollable rather than tall, and the notch is now at the side.
+------------------------------------------------------------------- */
+@media (orientation: landscape) {
+  .inner,
+  .mobileMenu {
+    padding-left: max(var(--wrap-pad), env(safe-area-inset-left));
+    padding-right: max(var(--wrap-pad), env(safe-area-inset-right));
+  }
+}
+
+@media (max-height: 480px) and (orientation: landscape) {
+  .mobileLink {
+    padding: 0.55rem 0;
+    font-size: 1.0625rem;
+  }
+
+  .mobileMenu {
+    padding-top: var(--sp-3);
+    padding-bottom: max(var(--sp-5), env(safe-area-inset-bottom));
   }
 }

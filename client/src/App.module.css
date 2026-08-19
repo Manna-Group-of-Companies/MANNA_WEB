@@ -4,8 +4,13 @@
   top: 0;
   transform: translate(-50%, -140%);
   z-index: var(--z-overlay);
+  /* Held clear of both gutters: the link is centred on the viewport, so
+     without a cap a long label on a 320px screen runs off both ends at
+     once and the first thing a keyboard reader meets is broken. */
+  max-width: calc(100% - var(--sp-6));
   padding: 0.75rem 1.25rem;
   border-radius: 0 0 var(--r-md) var(--r-md);
+  text-align: center;
   background: var(--c-ink);
   color: var(--c-on-ink);
   font-size: var(--fs-sm);

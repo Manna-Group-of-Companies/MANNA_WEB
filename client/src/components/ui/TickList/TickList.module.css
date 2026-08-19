@@ -5,7 +5,7 @@
 
 .item {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr);
   gap: 0.7rem;
   align-items: start;
   color: var(--c-ink-soft);

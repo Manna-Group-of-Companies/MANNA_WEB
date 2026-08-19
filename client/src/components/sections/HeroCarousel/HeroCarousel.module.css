@@ -75,6 +75,53 @@
   object-fit: cover;
 }
 
+/* ── Small and short screens ───────────────────────────────────────
+   The card width is deliberately left alone on a narrow portrait screen:
+   the hero measures its fold against this card (see `--hero-peek` in
+   Hero.module.css, which is half a card's height written out longhand),
+   and shrinking the card here would move the fold there.
+
+   A letterbox viewport is the exception. Two rows at the desktop size are
+   ~300px of decoration on a 375px-tall sideways phone, and by that height
+   the hero copy has already given up its full-height minimum — so the
+   carousel is below the fold whatever it measures, and the coupling above
+   does not apply.
+------------------------------------------------------------------- */
+@media (max-height: 540px) and (orientation: landscape) {
+  .carousel {
+    --card-w: clamp(168px, 19vw, 240px);
+    --card-gap: clamp(0.75rem, 2vw, 1.5rem);
+  }
+}
+
+/* A phone held upright shows about a card and a half, which is the intent —
+   but the fade eats 6% off each end, and 6% of 320px is a fifth of the card
+   at the edge. Pulled in, the crop reads as the row continuing rather than
+   as a card that has been dimmed. */
+@media (max-width: 560px) {
+  .row {
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 3.5%,
+      #000 96.5%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 3.5%,
+      #000 96.5%,
+      transparent
+    );
+  }
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────
+   The band stops drifting and becomes something you push instead. It keeps
+   its mask, so it still reads as running off both edges of the page rather
+   than as a strip that stops.
+------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .track {
     animation: none;
@@ -83,7 +130,18 @@
 
   .row {
     overflow-x: auto;
+    /* A sideways flick at the end of the row would otherwise page the
+       browser back through history on iOS and Chrome alike. */
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
     scrollbar-width: none;
+  }
+
+  /* `proximity`, not `mandatory`, and centred: the row is decoration, so it
+     should settle tidily where the reader lets go rather than insist on a
+     card boundary. */
+  .card {
+    scroll-snap-align: center;
   }
 
   .row::-webkit-scrollbar {

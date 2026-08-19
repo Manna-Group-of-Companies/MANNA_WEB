@@ -110,3 +110,37 @@
     font-size: 0.9375rem;
   }
 }
+
+@media (max-width: 400px) {
+  .hero {
+    /* The peek is derived from the card, and the card stops shrinking at its
+       228px floor — so below that width the fraction of a card showing above
+       the fold grows rather than shrinks. Hold it at the same half-card. */
+    --hero-peek: 72px;
+  }
+
+  .title {
+    /* One step below the clamp's floor. The headline is authored as two
+       lines with a <br> between them, and at the floor's 32px the second of
+       them — "quality and excellence." — is a few pixels too wide for a
+       360px screen and wraps again, turning two lines into three. */
+    font-size: 1.875rem;
+  }
+
+  .copy {
+    gap: 1.125rem;
+    padding-bottom: 2.5rem;
+  }
+}
+
+/* A sideways phone: the copy has already given up its full-height min above
+   (max-height: 540px), and the padding it was holding open goes with it. */
+@media (max-height: 540px) and (orientation: landscape) {
+  .hero {
+    padding-top: 2rem;
+  }
+
+  .copy {
+    padding-bottom: 2rem;
+  }
+}

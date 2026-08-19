@@ -54,3 +54,23 @@
   gap: var(--sp-4);
   margin-top: var(--sp-6);
 }
+
+@media (max-width: 560px) {
+  .title {
+    /* The 18ch measure is narrower than the screen here, so it does nothing
+       but stop the title using the width it has. */
+    max-width: none;
+  }
+
+  .eyebrow {
+    margin-top: var(--sp-4);
+  }
+
+  .actions {
+    /* A quote button beside a "3 products saved" link wraps into a ragged
+       pair; stacked and stretched they read as one block of actions. */
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--sp-3);
+  }
+}

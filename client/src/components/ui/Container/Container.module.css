@@ -15,3 +15,14 @@
 .wide {
   max-width: 1480px;
 }
+
+/* A notched phone held sideways puts the camera cut-out inside the viewport,
+   so the gutter has to grow past it or the first character of every line
+   disappears under the notch. Only in landscape: held upright the insets are
+   zero on the sides and `max()` would be doing nothing. */
+@media (orientation: landscape) {
+  .container {
+    padding-left: max(var(--wrap-pad), env(safe-area-inset-left));
+    padding-right: max(var(--wrap-pad), env(safe-area-inset-right));
+  }
+}

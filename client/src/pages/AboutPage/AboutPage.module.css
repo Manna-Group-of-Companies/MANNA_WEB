@@ -5,7 +5,9 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  /* `min(…, 100%)` so the 17rem floor cannot outrun a narrower column and
+     push the grid past the edge of the screen. */
+  grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr));
   gap: clamp(1rem, 2vw, 1.75rem);
 }
 
@@ -111,4 +113,28 @@
 .card:hover .arrow,
 .card:focus-within .arrow {
   transform: translateX(4px);
+}
+
+/* The lift and the rule-wipe are hover states, and a touchscreen has no
+   hover — what it has is a sticky one that leaves the last-tapped card
+   raised until you tap somewhere else.
+
+   `:not(:focus-within)` throughout, because these rules sit after the ones
+   they undo and match at the same weight: without it a card that is both
+   focused and stuck-hovered would lose the focus state as well, which is
+   the one thing on a card that has to survive. */
+@media (hover: none) {
+  .card:hover:not(:focus-within) {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .card:hover:not(:focus-within)::before {
+    transform: scaleX(0);
+  }
+
+  .card:hover:not(:focus-within) .index,
+  .card:hover:not(:focus-within) .arrow {
+    transform: none;
+  }
 }

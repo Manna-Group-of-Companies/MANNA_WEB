@@ -12,3 +12,18 @@
   width: auto;
   flex: none;
 }
+
+/* The bar loses height on a phone (see --header-h in tokens.css) and the
+   lockup has to come down with it, or it fills the bar edge to edge. Width
+   follows automatically from the aspect ratio. */
+@media (max-width: 900px) {
+  .mark {
+    height: 38px;
+  }
+}
+
+@media (max-width: 560px) {
+  .mark {
+    height: 32px;
+  }
+}

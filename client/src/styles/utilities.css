@@ -73,3 +73,47 @@
     animation: none;
   }
 }
+
+/* ------------------------------------------------------------------
+   Touch input
+
+   Two things every screen the site runs on has to agree about, kept here
+   rather than repeated in a dozen modules.
+------------------------------------------------------------------- */
+
+/* The grey flash Android draws over a tapped link, which lands on the wrong
+   shape on anything with a radius and fires on scroll as well as on tap.
+   Every control here already has its own :active or :focus-visible state. */
+@media (hover: none) {
+  a,
+  button,
+  [role='button'],
+  input,
+  label,
+  summary {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* A finger needs roughly 44px square to land reliably, which several inline
+   text links are not. Rather than pad them — which would break the lines
+   they sit in — the target is grown outwards with a pseudo-element that
+   takes no space in layout.
+
+   Opt in with `data-touch-target` on a positioned element. */
+@media (pointer: coarse) {
+  [data-touch-target] {
+    position: relative;
+  }
+
+  [data-touch-target]::before {
+    content: '';
+    position: absolute;
+    /* Centred on the element, so a short label grows equally on both sides. */
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+  }
+}

@@ -5,7 +5,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
   gap: clamp(2.5rem, 6vw, 5.5rem);
 }
@@ -87,7 +87,7 @@
 
 @media (max-width: 900px) {
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .art {
@@ -96,5 +96,30 @@
 
   .badge {
     right: 1rem;
+  }
+}
+
+@media (max-width: 560px) {
+  /* Hung off the corner of the artwork the badge covers a third of it at
+     this width. It comes inboard and sits on the image's bottom edge
+     instead, where it still reads as belonging to the picture. */
+  .badge {
+    right: var(--sp-4);
+    bottom: var(--sp-4);
+    padding: 0.7rem 0.9rem;
+  }
+
+  .badgeValue {
+    font-size: 1.375rem;
+  }
+
+  .badgeCaption {
+    font-size: 0.6875rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .art {
+    aspect-ratio: 3 / 2;
   }
 }

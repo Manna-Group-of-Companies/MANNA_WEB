@@ -301,3 +301,41 @@
     padding-block: var(--sp-7);
   }
 }
+
+@media (max-width: 560px) {
+  .card {
+    padding: var(--sp-5) var(--sp-4);
+  }
+
+  .identity {
+    /* An address that cannot fit is better wrapped than ellipsed here —
+       there is no wider view to fall back to. */
+    align-items: flex-start;
+  }
+
+  .identityEmail {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* A sideways phone is about 380px tall. Vertically centring a card that is
+   taller than that clips its head off the top of the screen with no way to
+   scroll back up, so on a short viewport the page scrolls from the top. */
+@media (max-height: 620px) and (max-width: 900px) {
+  .page {
+    min-height: 0;
+  }
+
+  .panel {
+    justify-content: flex-start;
+    padding-block: var(--sp-6);
+  }
+}
+
+@media (orientation: landscape) {
+  .panel {
+    padding-left: max(var(--wrap-pad), env(safe-area-inset-left));
+    padding-right: max(var(--wrap-pad), env(safe-area-inset-right));
+  }
+}

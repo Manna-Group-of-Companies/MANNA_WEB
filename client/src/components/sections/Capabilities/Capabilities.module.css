@@ -165,6 +165,12 @@
 }
 
 .chipValue {
+  /* The chip is capped at 82% of the card and set `nowrap`, so a long value
+     had nothing to stop it running out past the chip's own background. It
+     shortens instead. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--c-on-ink-muted);
   font-variant-numeric: tabular-nums;
 }
@@ -220,7 +226,7 @@
 /* ── Controls ──────────────────────────────────────────────────── */
 .controls {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   margin-top: clamp(1.5rem, 2.6vw, 2.25rem);
 }
@@ -305,7 +311,7 @@
   }
 
   .controls {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .dots {
@@ -315,5 +321,57 @@
 
   .arrows {
     grid-column: 2;
+  }
+}
+
+@media (max-width: 400px) {
+  .track {
+    /* A little more of the next card shows, so the rail still reads as a
+       rail rather than as a single card that happens to be centred. */
+    --card-w: min(82vw, 292px);
+  }
+
+  /* Two 44px discs and a row of dots do not fit across 288px. The dots are
+     the better control on a touchscreen — the rail is swipeable — so the
+     arrows, which duplicate the swipe, go. */
+  .arrows {
+    display: none;
+  }
+
+  .dots {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  .chip {
+    max-width: 74%;
+    padding: 0.3rem 0.5rem;
+  }
+}
+
+/* A finger is not a cursor: the dot's 18px box is a quarter of the target a
+   touchscreen needs, so it grows without the pill inside it changing size. */
+@media (pointer: coarse) {
+  .dot {
+    width: 28px;
+    height: 44px;
+  }
+
+  .dot[aria-current='true'] {
+    width: 52px;
+  }
+}
+
+/* No hover on a touchscreen, and the state most mobile browsers leave stuck
+   after a tap raises the last card you looked at until you tap elsewhere. */
+@media (hover: none) {
+  .card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .card:hover .frame,
+  .card:hover .arrow {
+    transform: none;
   }
 }

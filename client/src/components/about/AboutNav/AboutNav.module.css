@@ -118,6 +118,27 @@
   }
 }
 
+/* On a phone the strip runs to the edges of the screen rather than stopping
+   inside the gutter, so it reads as continuing off-screen — which is the
+   only cue that there is more of it to scroll to. */
+@media (max-width: 560px) {
+  .list {
+    margin-inline: calc(var(--wrap-pad) * -1);
+    padding-inline: var(--wrap-pad);
+    /* A visible scrollbar under a six-item strip is more chrome than the
+       strip; the bleed and the cut-off item say the same thing. */
+    scrollbar-width: none;
+  }
+
+  .list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .link:first-child {
+    padding-left: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .active::before {
     transform: none;

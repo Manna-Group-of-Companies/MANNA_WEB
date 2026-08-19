@@ -137,7 +137,7 @@
 
 @media (max-width: 760px) {
   .details {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-3);
   }
 }
@@ -152,5 +152,17 @@
   .input {
     padding: 0.6rem 0.4rem;
     border-bottom: 1px solid var(--c-line);
+  }
+}
+
+@media (max-width: 400px) {
+  .details {
+    margin-top: var(--sp-5);
+  }
+
+  .input {
+    /* One step down so the placeholder still fits — and no lower: Safari
+       zooms the page when a control under 16px takes focus. */
+    font-size: 1rem;
   }
 }

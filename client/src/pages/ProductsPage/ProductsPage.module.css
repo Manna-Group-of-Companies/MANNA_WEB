@@ -116,9 +116,11 @@
 
 .grid {
   display: grid;
+  /* `min(…, 100%)` so a floor wider than the column — a 230px card in a
+     200px slot — collapses to the slot rather than overflowing the page. */
   grid-template-columns: repeat(
     auto-fill,
-    minmax(var(--product-card-min), 1fr)
+    minmax(min(var(--product-card-min), 100%), 1fr)
   );
   gap: clamp(1rem, 2vw, 1.75rem);
   margin-top: var(--sp-5);
@@ -148,4 +150,81 @@
   justify-content: center;
   gap: var(--sp-4);
   margin-top: var(--sp-6);
+}
+
+/* ── Narrow screens ────────────────────────────────────────────────
+   The toolbar turns over: search moves above the filters, because on a phone
+   you reach for the box before you read six category chips, and the chips
+   become a single scrolling strip rather than three stacked rows.
+------------------------------------------------------------------- */
+@media (max-width: 760px) {
+  /* Grid rather than a column flex box. Stacking the toolbar with
+     `flex-direction: column` puts the scrolling chip strip on the cross
+     axis, where its content-based minimum — six categories laid end to end,
+     around 970px — sizes the flex line and drags the whole toolbar out with
+     it. A single-column grid track fixes the width at the container's, and
+     both rows are held to it. */
+  .toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-4);
+  }
+
+  .search {
+    order: -1;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .filters {
+    flex-wrap: nowrap;
+    /* Belt and braces with the grid track above: a grid item's automatic
+       minimum is its content too, and this is the item that has 970px of
+       it. */
+    min-width: 0;
+    /* Bled to the container's edges so the strip reads as running off the
+       screen rather than stopping short of it, and the last chip can be
+       scrolled clear of the gutter. */
+    margin-inline: calc(var(--wrap-pad) * -1);
+    padding-inline: var(--wrap-pad);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip {
+    flex: none;
+    scroll-snap-align: start;
+  }
+}
+
+/* One column below 480px — see ProductCard.module.css, which is where that
+   number is decided and where the card gives up its portrait ratio to suit a
+   full-width slot. Above it the auto-fill grid still finds room for two. */
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .searchInput {
+    /* Safari zooms the page when a control under 16px takes focus, and it
+       does not zoom back out. This is the smallest size that avoids it. */
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .emptyActions {
+    /* Two buttons side by side do not fit here, and half-width buttons with
+       wrapped labels read worse than a stack. */
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

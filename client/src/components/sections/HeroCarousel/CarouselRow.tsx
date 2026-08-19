@@ -21,12 +21,16 @@ export interface CarouselRowProps {
 /**
  * Tiles a copy must contain before it is wide enough to span the viewport.
  *
- * A card is at most 369px plus a ~40px gap, so eight of them cover roughly
- * 3270px — past any window this will meet. If a copy is narrower than the
- * screen, the track runs out of cards before the lap comes round and a bare
- * strip drifts through the seam.
+ * A card tops out at 369px and the gap at 40px, so each tile is 409px of
+ * track and twelve of them cover ~4900px. That clears a 3840px 4K panel run
+ * at 100% and a 3440px ultra-wide with room to spare; anything larger is a
+ * 5K display, which reports 2560 logical pixels because it runs at 2x.
+ *
+ * The floor matters because a copy narrower than the screen runs out of
+ * cards before the lap comes round, and a bare strip drifts through the
+ * seam once every pass.
  */
-const MIN_TILES_PER_COPY = 8;
+const MIN_TILES_PER_COPY = 12;
 
 export function CarouselRow({
   tiles,

@@ -53,7 +53,7 @@
 /* ── Panel ─────────────────────────────────────────────────────── */
 .panel {
   display: grid;
-  grid-template-columns: 1.05fr 1fr;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   align-items: center;
   gap: clamp(2rem, 5vw, 4.5rem);
   padding: clamp(1.25rem, 2.4vw, 2rem);
@@ -98,7 +98,7 @@
 
 @media (max-width: 900px) {
   .panel {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .art {
@@ -108,5 +108,47 @@
   .body {
     padding-right: 0;
     padding-bottom: var(--sp-3);
+  }
+}
+
+/* ── Narrow screens ────────────────────────────────────────────────
+   Six wrapped tabs make four ragged centred rows. A single scrolling strip
+   keeps the tab bar one line tall at any width, and the selected tab is
+   scrolled to by the reader rather than hunted for.
+------------------------------------------------------------------- */
+@media (max-width: 700px) {
+  .tabs {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    margin-inline: calc(var(--wrap-pad) * -1);
+    padding-inline: var(--wrap-pad);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    flex: none;
+    padding: 0.7rem 1rem;
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 560px) {
+  .panel {
+    /* The panel's own padding is a frame inside the page's gutter; at this
+       width the two together leave the artwork barely wider than a phone
+       is tall. */
+    padding: var(--sp-4);
+    gap: var(--sp-5);
+  }
+
+  .art {
+    aspect-ratio: 3 / 2;
   }
 }

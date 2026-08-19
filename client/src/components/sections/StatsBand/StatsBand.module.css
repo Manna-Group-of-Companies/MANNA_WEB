@@ -10,7 +10,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(1.5rem, 4vw, 3rem);
 }
 
@@ -37,7 +37,20 @@
 
 @media (max-width: 720px) {
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-6);
+  }
+}
+
+/* Three across is too many below 720px and one is too few above 480: at
+   phone widths the three figures sit two-up with the last one centred
+   under them, which keeps the band to two lines instead of three. */
+@media (max-width: 720px) and (min-width: 481px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stat:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 }

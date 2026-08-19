@@ -33,3 +33,24 @@
 .item:hover {
   opacity: 1;
 }
+
+@media (max-width: 560px) {
+  .row {
+    /* The gap clamp bottoms out at 20px, which is wider than the space
+       between two words — so the names read as further apart than the
+       letters in them. Tightened, three fit on a line instead of two. */
+    gap: 0.75rem 1.5rem;
+  }
+
+  .item {
+    font-size: 1rem;
+  }
+}
+
+@media (hover: none) {
+  .item {
+    /* Nothing here can be hovered, so the resting state is the only state a
+       touchscreen ever sees — and 0.75 opacity is not it. */
+    opacity: 1;
+  }
+}

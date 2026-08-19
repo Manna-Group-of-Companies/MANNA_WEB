@@ -37,9 +37,11 @@
 
 .grid {
   display: grid;
+  /* `min(…, 100%)` so a floor wider than the column — a 230px card in a
+     200px slot — collapses to the slot rather than overflowing the page. */
   grid-template-columns: repeat(
     auto-fill,
-    minmax(var(--product-card-min), 1fr)
+    minmax(min(var(--product-card-min), 100%), 1fr)
   );
   gap: clamp(1rem, 2vw, 1.75rem);
 }
@@ -97,4 +99,26 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--sp-4);
+}
+
+/* One column below 480px — see ProductCard.module.css, which is where that
+   number is decided and where the card gives up its portrait ratio to suit a
+   full-width slot. */
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .foot {
+    /* The two halves already wrap; stacking them deliberately keeps the
+       copy and the buttons from ending up side by side at 48% each. */
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .footActions {
+    flex-direction: column;
+  }
 }

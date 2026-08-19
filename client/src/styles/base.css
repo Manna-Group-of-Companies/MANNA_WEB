@@ -30,17 +30,68 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* A long unbroken run — an email address, a part number, a URL — is wider
+     than a 320px phone and would push the whole page sideways. Break it
+     rather than let one word set the width of the page. */
+  overflow-wrap: break-word;
 }
 
 body[data-scroll-locked='true'] {
   overflow: hidden;
 }
 
+/* ------------------------------------------------------------------
+   App shell
+
+   The page fills the screen even when its content does not, so the footer
+   sits on the bottom edge instead of floating halfway up a tall monitor —
+   an empty wishlist is a masthead and two lines, and on a 1440px-tall
+   display that leaves the colophon in the middle of the page. `vh` first as
+   the fallback, then `dvh` for mobile browsers whose toolbars shrink the
+   viewport as you scroll.
+------------------------------------------------------------------- */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* The one band that stretches: the header and the footer keep their natural
+   height and the page between them takes the slack. `1 0 auto` rather than
+   `1` — flex-shrink stays 0, so a page longer than the screen is never
+   squashed to fit one. */
+#root > main {
+  flex: 1 0 auto;
+}
+
 img,
 svg,
-video {
+video,
+canvas {
   display: block;
   max-width: 100%;
+}
+
+/* Paired with the max-width above so a constrained image scales instead of
+   squashing — but only where the markup has not already fixed the height. */
+img,
+video {
+  height: auto;
+}
+
+/* Form controls do not inherit the box the rest of the page lives in: left
+   alone, an input keeps its intrinsic size and overflows a narrow column. */
+input,
+textarea,
+select {
+  max-width: 100%;
+}
+
+textarea {
+  /* Dragging a textarea wider than its column is the one resize that can
+     break a layout the reader cannot then scroll back from. */
+  resize: vertical;
 }
 
 h1,

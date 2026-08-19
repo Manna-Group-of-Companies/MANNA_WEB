@@ -44,3 +44,31 @@
 .light .lede {
   color: var(--c-on-ink-muted);
 }
+
+/* ── Narrow screens ────────────────────────────────────────────────
+   The measures stay: 44ch is still narrower than a 560px column, and it is
+   what keeps a two-line heading from going ragged. The space under it is the
+   part that comes down — the clamp is already sitting on its 40px floor by
+   this width, and 40px of blank between a heading and the thing it
+   introduces reads as a gap on a screen this short.
+------------------------------------------------------------------- */
+@media (max-width: 560px) {
+  .head {
+    gap: var(--sp-3);
+    margin-bottom: var(--sp-6);
+  }
+}
+
+/* Below this the 44ch measure is wider than the column anyway, so it is
+   doing nothing but sitting in the way of the width the heading has. */
+@media (max-width: 400px) {
+  .head,
+  .center,
+  .lede {
+    max-width: none;
+  }
+
+  .head {
+    margin-bottom: var(--sp-5);
+  }
+}

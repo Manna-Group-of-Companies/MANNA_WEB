@@ -148,3 +148,93 @@
      related rail on a product page — and they have to agree. */
   --product-card-min: 230px;
 }
+
+/* ------------------------------------------------------------------
+   Breakpoints
+
+   The site is authored mobile-up in its intent but written max-width,
+   because the desktop layout is the one the tokens above describe and
+   each step below is a concession to a smaller frame.
+
+   Reach for a step from this scale first, so that two components do not
+   disagree about where a phone ends. A section may still set its own where
+   its content decides the number rather than the device does — the tab
+   strip that stops fitting at 700px, the stats band whose three figures go
+   two-up at 720 — and several predate this list.
+
+     ≤ 400px   small phone      (iPhone SE, 360-wide Androids)
+     ≤ 480px   catalogue grids drop to one column — ProductCard.module.css
+     ≤ 560px   phone
+     ≤ 760px   large phone / small tablet portrait
+     ≤ 900px   tablet portrait  — two-column splits collapse here
+     ≤ 1080px  tablet landscape — the header collapses to a burger here
+     ≤ 1240px  small laptop     — the mega-menu rail drops here
+     ≥ 1600px  large desktop
+     ≥ 2000px  ultra-wide
+
+   CSS custom properties cannot be used inside a media query condition, so
+   these live as a comment rather than as tokens: the numbers are repeated
+   literally in the modules, and changing one means changing it in each
+   module that uses it.
+
+   One rule that is not a breakpoint but belongs with them: every grid track
+   in this codebase is written `minmax(0, 1fr)`, never a bare `1fr`. A bare
+   `1fr` means `minmax(auto, 1fr)`, and that `auto` floors the track at the
+   min-content width of whatever is in it — so a single wide descendant
+   pushes its column, and with it the whole page, past the edge of the
+   screen. It is the failure that looks like "the site is not responsive":
+   every line of body copy runs off to the right at once.
+------------------------------------------------------------------- */
+
+/* Tablet landscape: the header has already given up its nav, so the bar
+   itself can lose some height. */
+@media (max-width: 1080px) {
+  :root {
+    --header-h: 72px;
+    /* The catalogue grid keeps three columns a little longer by letting a
+       card get narrower before the grid drops one. */
+    --product-card-min: 210px;
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --product-card-min: 200px;
+  }
+}
+
+/* Phone. The gutter tightens and the bar shrinks again — 80px of chrome on
+   a 640px-tall screen is a tenth of the page spent on a logo. */
+@media (max-width: 560px) {
+  :root {
+    --header-h: 64px;
+    --wrap-pad: 1.125rem;
+  }
+}
+
+@media (max-width: 400px) {
+  :root {
+    --wrap-pad: 1rem;
+    /* Every display clamp is already sitting on its floor by this width, so
+       the viewport term has stopped doing anything. The page masthead is the
+       one that still reads too large there — 38px of light display type in a
+       288px column sets three words to a line. */
+    --fs-h1: 2rem;
+  }
+}
+
+/* Large desktop: the measure opens up rather than leaving the page marooned
+   in the middle of a wide monitor. Everything else is a clamp that has
+   already topped out. */
+@media (min-width: 1600px) {
+  :root {
+    --wrap-max: 1360px;
+  }
+}
+
+@media (min-width: 2000px) {
+  :root {
+    --wrap-max: 1480px;
+    --product-card-min: 260px;
+  }
+}

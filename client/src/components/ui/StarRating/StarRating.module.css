@@ -113,3 +113,24 @@
   text-transform: uppercase;
   color: var(--star-label, var(--c-ink-muted));
 }
+
+/* Five 26px stars plus their gaps and the label run past a 320px screen.
+   The picker is a form control, so it steps down rather than wrapping. */
+@media (max-width: 400px) {
+  .picker {
+    font-size: 22px;
+    gap: 0.25rem;
+  }
+
+  .pickLabel {
+    margin-left: 0.25rem;
+  }
+}
+
+/* Scaling a star under the finger that is covering it does nothing but
+   reflow the row. */
+@media (hover: none) {
+  .pick:hover {
+    transform: none;
+  }
+}

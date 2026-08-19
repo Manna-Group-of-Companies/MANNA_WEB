@@ -74,7 +74,7 @@
 
 .point {
   display: grid;
-  grid-template-columns: 3.5rem 1fr;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
   gap: 0 var(--sp-4);
   /* Bled out past the measure so the hover tint has room either side
      without the copy shifting when it lands. */
@@ -131,7 +131,7 @@
 
 .factRow {
   display: grid;
-  grid-template-columns: minmax(11rem, 42%) 1fr;
+  grid-template-columns: minmax(11rem, 42%) minmax(0, 1fr);
   gap: var(--sp-4);
   padding: 0.85rem var(--sp-3);
   margin-inline: calc(var(--sp-3) * -1);
@@ -249,7 +249,7 @@
 
 @media (max-width: 640px) {
   .point {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-2);
   }
 
@@ -259,6 +259,32 @@
 
   .list {
     columns: 1;
+  }
+}
+
+@media (max-width: 560px) {
+  /* The label column has an 11rem floor — two thirds of the screen at this
+     width — which left the values wrapping one word to a line. Label over
+     value instead, with the rule between rows still separating them. */
+  .factRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.2rem;
+    padding-block: 0.7rem;
+  }
+
+  .factLabel {
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tr-caps);
+    text-transform: uppercase;
+  }
+
+  .quoteWrap {
+    padding-block: var(--sp-5);
+  }
+
+  .point {
+    padding-inline: var(--sp-3);
+    margin-inline: calc(var(--sp-3) * -1);
   }
 }
 
