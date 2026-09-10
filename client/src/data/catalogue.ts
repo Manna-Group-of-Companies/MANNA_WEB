@@ -30,7 +30,7 @@ export const productCategories: ProductCategory[] = [
     id: 'tread-rubber',
     label: 'Tread rubber',
     blurb:
-      'Forty-four patterns for highway, hill, mine and agricultural duty, built for mileage and uniform wear.',
+      'Fifty patterns for highway, hill, mine and agricultural duty, built for mileage and uniform wear.',
     tone: 'ink',
   },
   {
@@ -85,7 +85,7 @@ function slugify(value: string): string {
 }
 
 /* ── Tread rubber ─────────────────────────────────────────────────
-   Forty-four patterns. The range-level benefits below (mileage, traction,
+   Fifty patterns. The range-level benefits below (mileage, traction,
    cooler running, uniform wear) are the ones the old site published for the
    category as a whole; per-pattern detail is still outstanding.
 ------------------------------------------------------------------- */
@@ -99,6 +99,24 @@ interface TreadSeed {
   features?: string[];
   applications?: string[];
   pattern?: PatternName;
+}
+
+/**
+ * Studio render for a pattern, cut out of its backdrop and squared off.
+ *
+ * Sourced from the works' own "Product images" set (MT-01 – MT-50), one render
+ * per pattern, so the file name is just the pattern slug. They sit on a
+ * transparent ground rather than the original white sweep — the site is dark,
+ * and a white plate behind every tyre would read as a bug. That also means
+ * they have to be shown with `fit: 'contain'`; a cover crop eats the tread.
+ */
+function treadArt(slug: string): TileImage {
+  const base = `/products/tread/${slug}`;
+  return {
+    src: `${base}-800.webp`,
+    srcSet: `${base}-800.webp 800w, ${base}-1200.webp 1200w`,
+    fit: 'contain',
+  };
 }
 
 const TREAD_FEATURES = [
@@ -189,15 +207,30 @@ const treadSeeds: TreadSeed[] = [
     applications: ['Tractor front tyres', 'Farm and field duty'],
     pattern: 'stripe',
   },
+  /* MT-45 – MT-50: patterns the works added after the legacy site was last
+     written, so the name is all that has been published for them so far. */
+  { name: 'MM 30' },
+  { name: 'MH' },
+  {
+    name: 'MINES SUPER',
+    duty: 'Mining',
+    summary: 'Mine-duty tread pattern for off-road and quarry haulage.',
+    applications: ['Mining haul vehicles', 'Quarry and aggregate sites'],
+  },
+  { name: 'TRACKMAN' },
+  { name: 'MCR' },
+  { name: 'MARCO' },
 ];
 
 const treadRubber: CatalogueProduct[] = treadSeeds.map((seed) => {
-  const slug = `tread-${slugify(seed.name)}`;
+  const pattern = slugify(seed.name);
+  const slug = `tread-${pattern}`;
   return {
     id: slug,
     slug,
     name: seed.name,
     category: 'tread-rubber',
+    image: treadArt(pattern),
     summary:
       seed.summary ??
       'Tread rubber pattern from the Manna Group range. Price on request.',

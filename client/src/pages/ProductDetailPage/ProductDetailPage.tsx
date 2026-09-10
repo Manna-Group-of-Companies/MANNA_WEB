@@ -92,8 +92,10 @@ export function ProductDetailPage({ slug }: ProductDetailPageProps) {
                   )}
                   <img
                     className={styles.photo}
+                    data-fit={product.image.fit ?? 'cover'}
                     src={product.image.src}
                     srcSet={product.image.srcSet}
+                    sizes="(max-width: 900px) 92vw, 560px"
                     alt={product.name}
                   />
                 </picture>

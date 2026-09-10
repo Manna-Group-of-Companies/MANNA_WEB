@@ -56,6 +56,12 @@ export interface TileImage {
   srcSet?: string;
   /** WebP candidates served ahead of the raster fallback. */
   webpSrcSet?: string;
+  /**
+   * How the image sits in its frame. Photographs fill it edge to edge, so
+   * `cover` is the default. Cut-outs on a transparent ground — the tread
+   * renders — must be `contain`, or the frame crops the product itself away.
+   */
+  fit?: 'cover' | 'contain';
 }
 
 export interface ProductTile {

@@ -60,8 +60,10 @@ export function ProductCard({
               )}
               <img
                 className={styles.photo}
+                data-fit={product.image.fit ?? 'cover'}
                 src={product.image.src}
                 srcSet={product.image.srcSet}
+                sizes="(max-width: 640px) 60vw, 260px"
                 alt=""
                 loading="lazy"
               />

@@ -4,12 +4,12 @@ import type { Capability, Stat, Testimonial } from '@/types/content';
  * Figures taken from the legacy site's export profile and product listings.
  *
  * `years` is the "three decades" the company claims in its own copy; `patterns`
- * and `people` are countable facts (44 tread patterns catalogued, 51–100
+ * and `people` are countable facts (50 tread patterns catalogued, 51–100
  * employees declared). Confirm all three before print.
  */
 export const stats: Stat[] = [
   { id: 'years', value: 30, suffix: '+', label: 'Years manufacturing rubber' },
-  { id: 'patterns', value: 44, suffix: '', label: 'Tread rubber patterns' },
+  { id: 'patterns', value: 50, suffix: '', label: 'Tread rubber patterns' },
   { id: 'people', value: 50, suffix: '+', label: 'People on the floor' },
 ];
 
@@ -22,7 +22,7 @@ export const capabilities: Capability[] = [
   {
     id: 'tread-rubber',
     title: 'Tread rubber',
-    body: 'Forty-four tread patterns for highway, hill, mine and agricultural duty — built for greater mileage, decreased abrasion and improved load distribution across wet and dry surfaces.',
+    body: 'Fifty tread patterns for highway, hill, mine and agricultural duty — built for greater mileage, decreased abrasion and improved load distribution across wet and dry surfaces.',
     pattern: 'tread',
     image: {
       src: '/capabilities/tread-rubber.jpg',
@@ -31,7 +31,7 @@ export const capabilities: Capability[] = [
     },
     tone: 'ink',
     chips: [
-      { label: 'Patterns', value: '44', at: 'top-right' },
+      { label: 'Patterns', value: '50', at: 'top-right' },
       { label: 'Duty', value: 'Short, long, hill', at: 'bottom-left' },
     ],
     link: { label: 'Browse the patterns', href: '/products?category=tread-rubber' },

@@ -222,8 +222,8 @@ The copy and catalogue come from the legacy site at
 page, the old sitemap, and the migration gaps — is in
 [`legacy-site-content.md`](legacy-site-content.md) at the repo root.
 
-`client/src/data/catalogue.ts` carries all 91 products across the five real
-lines: 44 tread rubber patterns, 5 retreading processes, 16 compound grades, 5
+`client/src/data/catalogue.ts` carries all 97 products across the five real
+lines: 50 tread rubber patterns, 5 retreading processes, 16 compound grades, 5
 reclaim grades and 21 moulded goods. The repetitive lines are built from seed
 arrays through small factory functions, so adding a pattern is one line rather
 than forty.
@@ -242,10 +242,14 @@ Outstanding items, all flagged in `legacy-site-content.md`:
 
 - **Timeline milestones** — image-only on the old site, so the years and events
   could not be scraped. Needs the original graphic or the business.
-- **Per-pattern tread copy** — only VIKING has a real description. The other 43
+- **Per-pattern tread copy** — only VIKING has a real description. The other 49
   patterns fall back to a shared honest placeholder.
-- **Photography** — every tile still renders `PatternArt`. Swap for `<img>`
-  once real product photography exists.
+- **Photography** — the 50 tread patterns now carry real studio renders from
+  the works, cut out of their backdrop and served as WebP from
+  `client/public/products/tread/`. Retreading, compounds, reclaim and moulded
+  still render `PatternArt`; the moulded tiles under `client/public/products/`
+  are placeholder mock-ups, not our own goods. Swap both once photography
+  exists.
 - **"Established" conflict** — body copy says three decades, the export profile
   says the Pvt. Ltd. was established in 2020. The stats band says `30+`.
 - ~~**Two email addresses**~~ — settled: `site.email` is `mail@hi-techtreads.com`

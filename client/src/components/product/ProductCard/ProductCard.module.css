@@ -157,6 +157,13 @@
   object-fit: cover;
 }
 
+/* Cut-outs sit on a transparent ground — let the whole product show and let
+   the card's own wash fill the frame behind it. */
+.photo[data-fit='contain'] {
+  object-fit: contain;
+  padding: var(--sp-3);
+}
+
 /* ── Spec chips ────────────────────────────────────────────────── */
 .chip {
   position: absolute;

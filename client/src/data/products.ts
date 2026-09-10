@@ -99,7 +99,7 @@ export const products: Product[] = [
     id: 'tread-rubber',
     tab: 'Tread rubber',
     title: 'Tread rubber',
-    body: 'Forty-four patterns covering highway, hill, mine and agricultural duty. The range is built around greater mileage, decreased abrasion and improved load distribution, with traction that holds on both wet and dry surfaces.',
+    body: 'Fifty patterns covering highway, hill, mine and agricultural duty. The range is built around greater mileage, decreased abrasion and improved load distribution, with traction that holds on both wet and dry surfaces.',
     points: [
       'Short, long and hill application patterns',
       'Mine and tractor-specific designs in the range',
