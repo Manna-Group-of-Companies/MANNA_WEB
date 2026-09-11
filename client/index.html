@@ -29,8 +29,118 @@
       href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500&family=Inter:wght@300;400;500;600;700&family=Newsreader:opsz,wght@6..72,300;6..72,400&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Boot loader. Inline because it has to paint before the stylesheet and
+         the app bundle arrive; main.tsx lifts it once the page has loaded.
+         The wheel is the same drawing as components/ui/TyreSpinner. -->
+    <style>
+      #boot-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+        background: #000;
+        transition:
+          opacity 420ms cubic-bezier(0.22, 0.61, 0.36, 1),
+          visibility 0s linear 420ms;
+      }
+
+      #boot-loader[data-done] {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .boot-wheel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .boot-tyre {
+        display: block;
+        width: 84px;
+        height: 84px;
+        animation: boot-roll 1.3s linear infinite;
+      }
+
+      /* The road runs left under a wheel turning clockwise, at roughly the
+         speed of its tread (84px wheel, 1.3s a turn: ~200px/s), so the tyre
+         rolls rather than spins in place. */
+      .boot-road {
+        width: 180px;
+        height: 2px;
+        margin-top: 1px;
+        background: repeating-linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.3) 0 26px,
+          transparent 26px 48px
+        );
+        -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
+        mask-image: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
+        animation: boot-road 0.24s linear infinite;
+      }
+
+      .boot-label {
+        font: 600 11px/1 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #737378;
+      }
+
+      @keyframes boot-roll {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes boot-road {
+        to {
+          background-position: -48px 0;
+        }
+      }
+
+      /* Slower, and the road holds still — but the wheel keeps turning, since
+         a loader that stops reads as a page that has hung. The !important
+         outranks the blanket animation stop in base.css. */
+      @media (prefers-reduced-motion: reduce) {
+        #boot-loader .boot-tyre {
+          animation-duration: 2.6s !important;
+          animation-iteration-count: infinite !important;
+        }
+
+        #boot-loader .boot-road {
+          animation: none !important;
+        }
+      }
+    </style>
   </head>
   <body>
+    <div id="boot-loader" role="status" aria-label="Loading">
+      <div class="boot-wheel" aria-hidden="true">
+        <svg class="boot-tyre" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="38.5" fill="none" stroke="#2a2a2f" stroke-width="15" />
+          <circle cx="50" cy="50" r="46" fill="none" stroke="#45454b" stroke-width="6" pathLength="28" stroke-dasharray="0.6 0.4" />
+          <circle cx="50" cy="50" r="35" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1" />
+          <circle cx="50" cy="50" r="29.5" fill="#0c0c0e" stroke="#f47920" stroke-width="3" />
+          <g stroke="#f47920" stroke-width="3.5" stroke-linecap="round">
+            <path d="M50 41V22" />
+            <path d="M50 41V22" transform="rotate(72 50 50)" />
+            <path d="M50 41V22" transform="rotate(144 50 50)" />
+            <path d="M50 41V22" transform="rotate(216 50 50)" />
+            <path d="M50 41V22" transform="rotate(288 50 50)" />
+          </g>
+          <circle cx="50" cy="50" r="8" fill="#f47920" />
+          <circle cx="50" cy="50" r="3" fill="#0c0c0e" />
+        </svg>
+        <span class="boot-road"></span>
+      </div>
+      <span class="boot-label" aria-hidden="true">Loading</span>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

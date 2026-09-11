@@ -1,0 +1,104 @@
+/* ------------------------------------------------------------------
+   Tyre spinner — a wheel turning on the spot.
+
+   Rubber is drawn as warm-neutral greys a few steps above the black page,
+   so the casing reads as a tyre rather than a hole; the rim and hub carry
+   the brand orange, and the spokes are what make the rotation legible at
+   the smallest size.
+
+   Colour and text size come from the caller — each loading line keeps the
+   tone of the section it sits in.
+------------------------------------------------------------------- */
+.spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  text-align: center;
+}
+
+.tyre {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  /* Clockwise: the wheel of something travelling to the right. */
+  animation: tyre-roll 1.1s linear infinite;
+}
+
+.sm {
+  flex-direction: row;
+  gap: var(--sp-2);
+}
+
+.sm .tyre {
+  width: 22px;
+  height: 22px;
+}
+
+.lg {
+  gap: var(--sp-4);
+}
+
+.lg .tyre {
+  width: 72px;
+  height: 72px;
+  animation-duration: 1.3s;
+}
+
+/* ── The wheel ─────────────────────────────────────────────────── */
+.casing {
+  fill: none;
+  stroke: #2a2a2f;
+  stroke-width: 15;
+}
+
+.tread {
+  fill: none;
+  stroke: #45454b;
+  stroke-width: 6;
+  stroke-dasharray: 0.6 0.4;
+}
+
+/* The moulded ring on a sidewall. */
+.sidewall {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1;
+}
+
+.rim {
+  fill: var(--c-surface);
+  stroke: var(--c-brand);
+  stroke-width: 3;
+}
+
+.spokes {
+  stroke: var(--c-brand);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+
+.hub {
+  fill: var(--c-brand);
+}
+
+.cap {
+  fill: var(--c-surface);
+}
+
+@keyframes tyre-roll {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* base.css stops every animation after a single frame under reduced
+   motion. A loader that stands still is indistinguishable from a page that
+   has hung, so this one keeps turning — at half the pace. */
+@media (prefers-reduced-motion: reduce) {
+  .tyre {
+    animation-duration: 2.4s !important;
+    animation-iteration-count: infinite !important;
+  }
+}

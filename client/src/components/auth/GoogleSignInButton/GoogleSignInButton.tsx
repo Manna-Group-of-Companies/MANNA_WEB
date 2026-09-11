@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useGoogleIdentity } from '@/hooks/useGoogleIdentity';
+import { TyreSpinner } from '@/components/ui/TyreSpinner/TyreSpinner';
 import type { AuthMode } from '@/types/auth';
 import styles from './GoogleSignInButton.module.css';
 
@@ -106,7 +107,11 @@ export function GoogleSignInButton({
     <div className={styles.wrap} data-busy={busy}>
       <div className={styles.host} ref={host} />
       {script === 'loading' && (
-        <p className={styles.loading}>Loading Google sign-in…</p>
+        <TyreSpinner
+          size="sm"
+          className={styles.loading}
+          label="Loading Google sign-in…"
+        />
       )}
     </div>
   );

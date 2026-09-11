@@ -7,6 +7,7 @@ import { useSearchParam } from '@/hooks/useSearchParams';
 import { Logo } from '@/components/layout/Logo/Logo';
 import { Button } from '@/components/ui/Button/Button';
 import { TickList } from '@/components/ui/TickList/TickList';
+import { TyreSpinner } from '@/components/ui/TyreSpinner/TyreSpinner';
 import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton/GoogleSignInButton';
 import type { AuthMode } from '@/types/auth';
 import styles from './AuthPage.module.css';
@@ -94,7 +95,7 @@ export function AuthPage({ mode }: AuthPageProps) {
           </header>
 
           {!ready ? (
-            <p className={styles.loading}>Checking your session…</p>
+            <TyreSpinner className={styles.loading} label="Checking your session…" />
           ) : user ? (
             <div className={styles.signedIn}>
               <div className={styles.identity}>

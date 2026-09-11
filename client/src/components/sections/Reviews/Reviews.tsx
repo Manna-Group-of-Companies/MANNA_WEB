@@ -4,6 +4,7 @@ import { useReviews } from '@/hooks/useReviews';
 import { Container } from '@/components/ui/Container/Container';
 import { Reveal } from '@/components/ui/Reveal/Reveal';
 import { Stars } from '@/components/ui/StarRating/StarRating';
+import { TyreSpinner } from '@/components/ui/TyreSpinner/TyreSpinner';
 import { ReviewCard } from './ReviewCard';
 import { ReviewForm } from './ReviewForm';
 import styles from './Reviews.module.css';
@@ -92,7 +93,7 @@ export function Reviews() {
       </Container>
 
       {status === 'loading' ? (
-        <p className={styles.loading}>Loading reviews…</p>
+        <TyreSpinner className={styles.loading} label="Loading reviews…" />
       ) : count === 0 ? (
         <Container>
           <Reveal className={styles.empty}>
