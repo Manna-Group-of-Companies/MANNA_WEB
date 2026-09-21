@@ -1,5 +1,6 @@
 import { Header } from '@/components/layout/Header/Header';
 import { Footer } from '@/components/layout/Footer/Footer';
+import { ChatBot } from '@/components/ui/ChatBot/ChatBot';
 import { HomePage } from '@/pages/HomePage/HomePage';
 import { AuthPage } from '@/pages/AuthPage/AuthPage';
 import { ProductsPage } from '@/pages/ProductsPage/ProductsPage';
@@ -62,6 +63,7 @@ export default function App() {
             {resolve(path)}
           </main>
           <Footer />
+          <ChatBot />
         </>
       )}
     </>

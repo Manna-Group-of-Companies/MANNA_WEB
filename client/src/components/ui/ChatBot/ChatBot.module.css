@@ -1,0 +1,211 @@
+.root {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  animation: fade 180ms ease both;
+  z-index: -1;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Floating card, anchored just above the round toggle button. */
+.panel {
+  width: min(23rem, calc(100vw - 3rem));
+  height: min(31rem, calc(100vh - 8rem));
+  display: flex;
+  flex-direction: column;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 1.25rem;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55);
+  transform-origin: bottom right;
+  transform: scale(0.9) translateY(0.75rem);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 200ms ease, opacity 160ms ease;
+}
+
+.panelOpen {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.15rem;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.title {
+  font-family: var(--font-display, var(--font-sans));
+  font-size: 1rem;
+  color: var(--c-ink);
+}
+
+.close {
+  border: none;
+  background: none;
+  color: var(--c-ink-muted);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: var(--c-ink);
+}
+
+.list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.row.user {
+  align-items: flex-end;
+}
+
+.row.bot {
+  align-items: flex-start;
+}
+
+.bubble {
+  max-width: 86%;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.86rem;
+  line-height: 1.48;
+  border: 1px solid var(--c-line);
+  border-radius: 1rem;
+}
+
+.row.bot .bubble {
+  background: var(--c-surface-2);
+  color: var(--c-ink-soft);
+  border-bottom-left-radius: 0.3rem;
+}
+
+.row.user .bubble {
+  background: var(--c-inverse);
+  color: var(--c-on-ink);
+  border-color: transparent;
+  border-bottom-right-radius: 0.3rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip {
+  border: 1px solid var(--c-line);
+  background: transparent;
+  color: var(--c-ink-soft);
+  font-size: 0.76rem;
+  padding: 0.38rem 0.7rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 140ms ease, color 140ms ease;
+}
+
+.chip:hover {
+  border-color: var(--c-brand);
+  color: var(--c-ink);
+}
+
+.form {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.85rem;
+  border-top: 1px solid var(--c-line);
+}
+
+.input {
+  flex: 1;
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-line);
+  border-radius: 999px;
+  color: var(--c-ink);
+  padding: 0.55rem 0.9rem;
+  font-size: 0.85rem;
+  font-family: var(--font-sans);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--c-focus);
+}
+
+.send {
+  border: 1px solid var(--c-line-strong);
+  background: var(--c-inverse);
+  color: var(--c-on-ink);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+}
+
+.send:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Round floating action button. */
+.toggle {
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 50%;
+  border: none;
+  background: var(--c-brand);
+  color: var(--c-brand-on);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 28px rgba(244, 121, 32, 0.4);
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.toggle:hover {
+  background: var(--c-brand-strong);
+  transform: translateY(-2px);
+}
+
+.toggleIcon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
