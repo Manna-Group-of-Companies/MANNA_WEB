@@ -2,11 +2,20 @@
   position: fixed;
   right: 1.5rem;
   bottom: 1.5rem;
+  right: calc(1.5rem + env(safe-area-inset-right, 0px));
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
   z-index: 60;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 1rem;
+}
+
+@media (max-width: 30rem) {
+  .root {
+    right: calc(1rem + env(safe-area-inset-right, 0px));
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 .backdrop {
@@ -28,10 +37,17 @@
   }
 }
 
-/* Floating card, anchored just above the round toggle button. */
+/* Floating card, anchored just above the round toggle button. Fixed (not
+   flex-flow) so its height is always measured from the button up to a safe
+   margin below the header, instead of overflowing past the top of the
+   viewport on short windows. */
 .panel {
-  width: min(23rem, calc(100vw - 3rem));
-  height: min(31rem, calc(100vh - 8rem));
+  position: fixed;
+  right: calc(1.5rem + env(safe-area-inset-right, 0px));
+  bottom: calc(1.5rem + 3.75rem + 1rem + env(safe-area-inset-bottom, 0px));
+  width: min(23rem, calc(100vw - 2rem));
+  height: min(31rem, calc(100dvh - var(--chrome-h, 5rem) - 6.25rem - 1rem));
+  max-height: calc(100dvh - var(--chrome-h, 5rem) - 6.25rem - 1rem);
   display: flex;
   flex-direction: column;
   background: var(--c-surface);
@@ -51,11 +67,31 @@
   pointer-events: auto;
 }
 
+/* Below this, the floating card becomes a full-screen sheet so it never
+   gets cramped or clipped by the keyboard on a phone. */
+@media (max-width: 30rem) {
+  .panel {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    border-radius: 0;
+    border: none;
+    transform: translateY(1rem);
+  }
+
+  .panelOpen {
+    transform: translateY(0);
+  }
+}
+
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.15rem;
+  padding-top: calc(1rem + env(safe-area-inset-top, 0px));
   border-bottom: 1px solid var(--c-line);
 }
 
@@ -149,6 +185,7 @@
   display: flex;
   gap: 0.5rem;
   padding: 0.85rem;
+  padding-bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--c-line);
 }
 
@@ -203,6 +240,13 @@
 .toggle:hover {
   background: var(--c-brand-strong);
   transform: translateY(-2px);
+}
+
+@media (max-width: 30rem) {
+  .toggle {
+    width: 3.25rem;
+    height: 3.25rem;
+  }
 }
 
 .toggleIcon {
